@@ -13,10 +13,10 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
 
-const pages = ['About Us', 'Services', 'Workout Generator', 'Contact Us'];
+const pages = ['Home','About Us', 'Services', 'Contact Us'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function ResponsiveAppBar() {
+function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -55,7 +55,7 @@ function ResponsiveAppBar() {
             component="a"
             href="#app-bar-with-responsive-menu"
             sx={{
-              mr: 40,
+              mr: 4,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
@@ -94,7 +94,7 @@ function ResponsiveAppBar() {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: 'block', md: 'none' },
-                mr: 40,
+                mr: 4,
               }}
             >
               {pages.map((page) => (
@@ -169,4 +169,4 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
-export default ResponsiveAppBar;
+export default NavBar;
