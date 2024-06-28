@@ -5,7 +5,8 @@ const Banner = () => {
   return (
     <header className="banner">
       <div className="overlay">
-        <h1>Elevate Your Fitness</h1>
+        <h1>Strong Mind, Strong Body</h1>
+        <h3>Welcome to the new world </h3>
         <p>Experience the best gym in town with state-of-the-art equipment and expert trainers.</p>
         <button className="join-now">Join Now</button>
       </div>

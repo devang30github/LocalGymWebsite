@@ -12,12 +12,12 @@ const FeaturedClasses = () => {
     {
       title: 'Personalized Workouts',
       description: 'Get your heart pumping with our high-intensity spin classes.',
-      image: '/workouts.jpg', // Replace with actual image paths
+      image: '/dumbellBG.jpg', // Replace with actual image paths
     },
     {
       title: 'Strength Training',
       description: 'Build muscle and improve your overall strength with our strength training classes.',
-      image: '/strength.jpg', // Replace with actual image paths
+      image: '/strengthBG.jpg', // Replace with actual image paths
     },
   ];
 
