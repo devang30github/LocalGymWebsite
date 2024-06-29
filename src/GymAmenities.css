@@ -1,0 +1,48 @@
+/* src/components/GymAmenities.css */
+.gym-amenities {
+  text-align: center;
+  padding: 2rem 0;
+  
+  
+}
+
+.gym-amenities h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.gym-amenities p {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.amenities-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.amenity-card {
+  
+  
+  border-radius: 8px;
+  padding: 1rem;
+  
+  width: 300px;
+  text-align: left;
+}
+
+
+
+.amenity-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.amenity-card p {
+  font-size: 1rem;
+  color: #666;
+}

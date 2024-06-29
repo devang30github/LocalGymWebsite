@@ -29,7 +29,7 @@ const FeaturedClasses = () => {
         {classes.map((classItem, index) => (
           <div className="class-card" key={index}>
             <div className="class-image" style={{ backgroundImage: `url(${classItem.image})` }}></div>
-            <h4>{classItem.title}</h4>
+            <h3>{classItem.title}</h3>
             <p>{classItem.description}</p>
           </div>
         ))}
