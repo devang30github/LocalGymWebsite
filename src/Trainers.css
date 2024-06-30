@@ -1,0 +1,57 @@
+.trainers-section {
+  text-align: center;
+  padding: 50px;
+}
+
+.trainers-section h2 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.trainers-section p {
+  font-size: 1.2em;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.trainers-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.trainer-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 350px;
+  text-align: left;
+}
+
+.trainer-image {
+  height: 300px;
+  background-size: cover;
+  
+}
+
+.trainer-info {
+  padding: 10px;
+}
+
+.trainer-info h3 {
+  margin: 0 0 10px;
+  font-size: 1.5em;
+  color: #777;
+}
+
+.trainer-info h4 {
+  margin: 0 0 15px;
+  font-size: 1.2em;
+  color: #888;
+}
+
+.trainer-info p {
+  color: #555;
+}
