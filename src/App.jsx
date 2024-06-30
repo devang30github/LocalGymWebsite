@@ -21,6 +21,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './Home';
 import AboutUs from './AboutUs';
+import Services from './Services';
 
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
       <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/services" element={<Services/>} />
       </Routes>
     </Router>
   );

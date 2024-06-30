@@ -1,0 +1,16 @@
+.fitness-potential-section {
+  background-color: #1a1a1a; /* Dark background color */
+  color: #fff; /* White text color */
+  text-align: center;
+  padding: 50px;
+}
+
+.fitness-potential-section h1 {
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+.fitness-potential-section p {
+  font-size: 1.2em;
+  color: #ccc; /* Light gray text color */
+}
