@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,8 +13,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
-
-const pages = ['Home','About Us', 'Services', 'Contact Us'];
+const pages = ['Home', 'About Us', 'Services', 'Contact Us'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function NavBar() {
@@ -39,28 +39,28 @@ function NavBar() {
     <AppBar position="static" sx={{ backgroundColor: 'black' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-        <Box
-              component="img"
-              sx={{
-                display: { xs: 'none', md: 'flex' },
-                mr: 4,
-                height: 40,
-              }}
-              alt="Logo"
-              src="/gym.png"
-            />
+          <Box
+            component="img"
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              mr: 4,
+              height: 40,
+            }}
+            alt="Logo"
+            src="/gym.png"
+          />
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               mr: 4,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: ' red',
+              color: 'red',
               textDecoration: 'none',
             }}
           >
@@ -99,17 +99,21 @@ function NavBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography textAlign="center">
+                    <Link to={`/${page.toLowerCase().replace(' ', '-')}`}>
+                      {page}
+                    </Link>
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          
+
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -129,6 +133,8 @@ function NavBar() {
                 key={page}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
+                component={Link}
+                to={`/${page.toLowerCase().replace(' ', '-')}`}
               >
                 {page}
               </Button>
@@ -169,4 +175,5 @@ function NavBar() {
     </AppBar>
   );
 }
+
 export default NavBar;
