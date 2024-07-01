@@ -35,6 +35,7 @@ const Trainers = () => {
               <h3>{trainer.name}</h3>
               <h4>{trainer.title}</h4>
               <p>{trainer.description}</p>
+              <p>hello</p>
             </div>
           </div>
         ))}
