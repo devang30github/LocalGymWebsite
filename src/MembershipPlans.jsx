@@ -1,5 +1,7 @@
 import React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import './MembershipPlans.css';
+
 
 const plans = [
   {
@@ -21,6 +23,11 @@ const plans = [
 ];
 
 const MembershipPlans = () => {
+  const navigate = useNavigate();
+
+  const handleJoinNowClick = () => {
+    navigate('/registration');
+  };
   return (
     <div className="membership-plans-section">
       <h1>Membership Plans</h1>
@@ -35,7 +42,8 @@ const MembershipPlans = () => {
                 <p key={idx}>{price}</p>
               ))}
             </div>
-            <button>Join Now</button>
+            
+            <button onClick={handleJoinNowClick}>Join Now</button>
           </div>
         ))}
       </div>
