@@ -1,0 +1,78 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    /* transition: all 0.5s ease-in; */
+    scroll-behavior: smooth;
+    scroll-padding-top: 16vh;
+}
+form{
+    background-image: url('/LocalGymWebsite/public/formbg.jpg');
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.contact .contents{
+    display: flex;
+    background-color: #3a3a3a;
+    flex-wrap: wrap;
+    gap: 1rem;
+    height: 800px;
+    border-radius: 20px;
+}
+.contact .contents iframe{
+    height: 800px;
+    width: 100%;
+    flex:1 1 20rem;
+    object-fit: cover;
+}
+.contact .contents form{
+    height: 350px;
+    flex: 1 1 45rem;
+    align-items: center;
+    padding: 5rem 2rem;
+    position: relative;
+    top: 10px;
+}
+.contact .contents form h3{
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 3.5rem;
+    padding: 1.5rem 0;
+    position: relative;
+    bottom: 90px;
+}
+.contact .contents form .inputbox{
+    display: flex;
+    align-items: center;
+    text-align: start;
+    padding-left: 10px;
+    margin-bottom: 2rem;
+    border: .1rem solid #c0dbea;
+    border-radius: 20px;
+}
+div .inputbox{
+    height: 50px;
+    width: 600px;
+    position: relative;
+    left: 10px;
+}
+textarea.inputbox{
+    height: 200px;
+}
+.btn{
+    font-size: 20px;
+    height: 50px;
+    width: 100px;
+    border-radius: 20px;
+    margin-top: 50px;
+}
+
+
+

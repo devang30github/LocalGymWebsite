@@ -23,7 +23,7 @@ import Home from './Home';
 import AboutUs from './AboutUs';
 import Services from './Services';
 import RegisterForm from './RegisterForm';
-
+import ContactUs from './ContactUs';
 
 const App = () => {
   return (
@@ -33,6 +33,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/services" element={<Services/>} />
+        <Route path="/Contact-us" element={<ContactUs/>} />
         <Route path="/registration" element={<RegisterForm/>} />
       </Routes>
     </Router>
