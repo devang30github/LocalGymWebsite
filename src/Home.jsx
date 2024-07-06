@@ -7,7 +7,8 @@ import Footer from "./Footer";
 
 
 
-function Home(){
+
+const Home = () => {
   return <>
   <NavBar/>
   <Banner/>

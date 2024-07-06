@@ -24,6 +24,7 @@ import AboutUs from './AboutUs';
 import Services from './Services';
 import RegisterForm from './RegisterForm';
 import ContactUs from './ContactUs';
+import WorkoutGenerator from './WorkoutGenerator';
 
 const App = () => {
   return (
@@ -35,6 +36,8 @@ const App = () => {
         <Route path="/services" element={<Services/>} />
         <Route path="/Contact-us" element={<ContactUs/>} />
         <Route path="/registration" element={<RegisterForm/>} />
+        <Route path="/Workout-generator" element={<WorkoutGenerator/>} />
+
       </Routes>
     </Router>
   );
