@@ -154,7 +154,7 @@ export default function WorkoutPlans() {
 
       <div className="filters">
         <div className="filter-group">
-          <label>Body Part</label>
+          <label className="secondsectionHeader">Body Part</label>
           <div className="filter-options">
             <label>
               <input
@@ -192,7 +192,7 @@ export default function WorkoutPlans() {
         </div>
 
         <div className="filter-group">
-          <label>Equipment</label>
+          <label className="secondsectionHeader">Equipment</label>
           <div className="filter-options">
             <label>
               <input
@@ -222,7 +222,7 @@ export default function WorkoutPlans() {
         </div>
 
         <div className="filter-group">
-          <label>Difficulty</label>
+          <label className="secondsectionHeader">Difficulty</label>
           <div className="filter-options">
             <label>
               <input
