@@ -1,10 +1,15 @@
-import React from "react";
-import WorkoutPlans from "./WorkoutPlans";
+import React, { useState } from 'react';
+import WorkoutPlans from './WorkoutPlans';
+import NavBar from './NavBar';
 
 const WorkoutGenerator = () => {
-  return <>
-  <WorkoutPlans/>
-  </>
+
+  return (
+    <>
+    <NavBar/>
+    <WorkoutPlans/>
+    </>
+  );
 };
 
-export default WorkoutGenerator
+export default WorkoutGenerator;
