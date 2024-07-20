@@ -1,6 +1,8 @@
 .membership-plans-section {
-  background-color: #1a1a1a; /* Dark background color */
-  color: #fff; /* White text color */
+  background-color: #1a1a1a;
+  /* Dark background color */
+  color: #fff;
+  /* White text color */
   text-align: center;
   padding: 50px;
 }
@@ -12,7 +14,8 @@
 
 .membership-plans-section p {
   font-size: 1.2em;
-  color: #ccc; /* Light gray text color */
+  color: #ccc;
+  /* Light gray text color */
   margin-bottom: 40px;
 }
 
@@ -23,7 +26,8 @@
 }
 
 .plan-card {
-  background-color: #3a3a3a; /* Darker card background */
+  background-color: #3a3a3a;
+  /* Darker card background */
   border-radius: 10px;
   padding: 20px;
   width: 22%;
@@ -61,5 +65,9 @@
 }
 
 .plan-card button:hover {
-  background-color:cyan;
+  background-color: cyan;
+}
+
+button:active {
+  background-color: #1e7e34;
 }

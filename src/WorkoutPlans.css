@@ -212,3 +212,6 @@ body {
     align-self: flex-end;
   }
 }
+button:active{
+  background-color: #1e7e34;
+}

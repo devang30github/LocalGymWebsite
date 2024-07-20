@@ -43,6 +43,7 @@ const GymMembershipForm = () => {
         <input
           type="email"
           name="email"
+          className='lwcase'
           value={formData.email}
           onChange={handleChange}
           required

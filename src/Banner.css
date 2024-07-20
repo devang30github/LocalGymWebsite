@@ -50,6 +50,10 @@
   background-color: #c2185b;
 }
 
+.join-now:active{
+  background-color: #1e7e34;
+}
+
 .overlay::before {
   content: '';
   position: absolute;

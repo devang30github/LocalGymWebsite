@@ -58,3 +58,6 @@
 .form-container button:active {
   background-color: #1e7e34;
 }
+.lwcase{
+  text-transform: lowercase;
+}
