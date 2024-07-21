@@ -136,6 +136,10 @@ body {
   background-color: #46494c;
 }
 
+.exercise-actions button:active {
+  background-color: #a7b7c7;
+}
+
 .exercise-actions a button {
   background-color: #3a3a3a;
 }
@@ -196,6 +200,10 @@ body {
   background-color: #0056b3;
 }
 
+.exercise-form button:active {
+  background-color: #02366d;
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
   .exercise-form {
@@ -211,7 +219,4 @@ body {
   .controls {
     align-self: flex-end;
   }
-}
-button:active{
-  background-color: #1e7e34;
 }
