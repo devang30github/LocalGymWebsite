@@ -1,5 +1,8 @@
 // GymMembershipForm.js
 import React, { useState } from 'react';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import './GymMembershipForm.css';
 
 const GymMembershipForm = () => {
@@ -10,6 +13,8 @@ const GymMembershipForm = () => {
     membershipType: 'Basic',
     termsAgreed: false
   });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -23,6 +28,10 @@ const GymMembershipForm = () => {
     e.preventDefault();
     // Handle form submission
     console.log(formData);
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -50,13 +59,23 @@ const GymMembershipForm = () => {
         />
 
         <label>Password</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+        <div className="password-container">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="password-input"
+          />
+          <IconButton
+            aria-label="toggle password visibility"
+            onClick={handleClickShowPassword}
+            className="password-icon"
+          >
+            {showPassword ? <VisibilityOff /> : <Visibility />}
+          </IconButton>
+        </div>
 
         <label>Membership Type</label>
         <select
@@ -64,9 +83,16 @@ const GymMembershipForm = () => {
           value={formData.membershipType}
           onChange={handleChange}
         >
-          <option value="Basic">Basic</option>
-          <option value="Premium">Premium</option>
-          <option value="VIP">VIP</option>
+          <optgroup label="Personal Training">
+            <option value="personal_training_beginner">PT-Beginner</option>
+            <option value="personal_training_intermediate">PT-Intermediate</option>
+            <option value="personal_training_advanced">PT-Advanced</option>
+          </optgroup>
+          <optgroup label="Membership Plans">
+            <option value="membership_plan_basic">M-Basic</option>
+            <option value="membership_plan_standard">M-Standard</option>
+            <option value="membership_plan_premium">M-Premium</option>
+          </optgroup>
         </select>
 
         <label>
