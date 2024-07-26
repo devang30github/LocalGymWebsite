@@ -1,7 +1,7 @@
 /* GymMembershipForm.css */
 
 .form-container {
-  height: 700px;
+  height: 750px;
   width: 400px;
   margin: 55px auto;
   padding: 25px;
@@ -25,7 +25,7 @@
 
 .form-container input[type="text"],
 .form-container input[type="email"],
-.form-container input[type="password"],
+/* .form-container input[type="password"], */
 .form-container select {
   width: 100%;
   padding: 15px;
@@ -33,13 +33,14 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
+  margin: 12px 0;
 }
 
 .form-container input[type="checkbox"] {
   margin-right: 10px;
 }
 
-.form-container button {
+.form-container .btn {
   width: 100%;
   padding: 10px;
   background-color: #28a745;
@@ -48,6 +49,7 @@
   color: white;
   font-size: 16px;
   cursor: pointer;
+  margin: auto;
   
 }
 
@@ -60,4 +62,29 @@
 }
 .lwcase{
   text-transform: lowercase;
+}
+.password-input{
+  position: relative;
+  width: 80%;
+  left: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+.form-container .password-icon{
+  width: 20%;
+  height: 50px;
+  padding: 10px;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  position: relative;
+  right: 5px;
+  bottom: 1px;
+  /* margin: auto; */
 }

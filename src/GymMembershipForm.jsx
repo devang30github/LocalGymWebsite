@@ -105,7 +105,7 @@ const GymMembershipForm = () => {
           I agree to the terms and conditions
         </label>
 
-        <button type="submit">Register</button>
+        <button type="submit" className='btn'>Register</button>
       </form>
     </div>
   );
