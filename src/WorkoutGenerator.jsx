@@ -3,6 +3,7 @@ import WorkoutPlans from './WorkoutPlans';
 import NavBar from './NavBar';
 import Footer from './Footer'
 
+
 const WorkoutGenerator = () => {
 
   return (
@@ -13,5 +14,6 @@ const WorkoutGenerator = () => {
     </>
   );
 };
+
 
 export default WorkoutGenerator;

@@ -20,7 +20,7 @@ const GymMembershipForm = () => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: name === 'email' ? value.toLowerCase() : (type === 'checkbox' ? checked : value)
     });
   };
 
