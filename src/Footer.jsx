@@ -8,10 +8,10 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-section">
-        <h3 className="footer-logo">Fitness Gym</h3>
-        <p>123 Main St, Anytown USA</p>
+        <h3 className="footer-logo">Siddhivinayak Gym</h3>
+        <p>Sambhaji Nagar, Ashokvan Dahisar(E)</p>
         <p>Phone: (123) 456-7890</p>
-        <p>Email: info@fitnessgym.com</p>
+        <p>Email: siddhivinayakgym@gmail.com</p>
       </div>
       <div className="footer-section">
         <h3>Quick Links</h3>
@@ -32,7 +32,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-section">
-        <p>&copy; 2024 Fitness Gym. All rights reserved.</p>
+        <p>&copy; 2024 Siddhivinayak  Gym. All rights reserved.</p>
         <div className="footer-legal">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
