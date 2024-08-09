@@ -25,8 +25,15 @@ const GymMembershipForm = () => {
       const { userId, registrationSuccess } = JSON.parse(savedState);
       setUserId(userId);
       setRegistrationSuccess(registrationSuccess);
+      if (registrationSuccess) {
+        setFormHeight('1250px');
+      } else {
+        setFormHeight('750px');
+      }
     }
   }, []);
+
+  const [formHeight, setFormHeight] = useState('650px'); // Initial height
 
   const resetRegistrationState = () => {
     // Clear localStorage entirely
@@ -72,6 +79,7 @@ const GymMembershipForm = () => {
       const data = await response.json();
       setUserId(data.userId);
       setRegistrationSuccess(true);
+      setFormHeight('1250px');
     } catch (error) {
       console.error('Error:', error);
       alert('Registration failed');
@@ -108,7 +116,7 @@ const GymMembershipForm = () => {
   };
 
   return (
-    <div className="form-container">
+    <div className="form-container" style={{ height: formHeight }}>
       <h2>Gym Membership Registration</h2>
       <p>Fill out the form below to register for your gym membership.</p>
       <form onSubmit={handleRegister}>
@@ -193,7 +201,7 @@ const GymMembershipForm = () => {
         </label>
 
         <button type="submit" className='btn'>Register</button>
-        <button onClick={resetRegistrationState}>Reset Registration</button>
+        <button onClick={resetRegistrationState} >Retry</button>
         
       </form>
       {registrationSuccess && (
