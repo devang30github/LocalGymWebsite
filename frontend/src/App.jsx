@@ -26,19 +26,22 @@ import RegisterForm from './RegisterForm';
 import ContactUs from './ContactUs';
 import WorkoutGenerator from './WorkoutGenerator';
 import AdminDashboard from './AdminDashboard';
+import Login from './Login';
+import ProtectedRoute from './ProtectedRoute';
 
 const App = () => {
   return (
     <Router>
       <Routes>
       <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/services" element={<Services/>} />
-        <Route path="/Contact-us" element={<ContactUs/>} />
-        <Route path="/registration" element={<RegisterForm/>} />
-        <Route path="/Workout-generator" element={<WorkoutGenerator/>} />
-        <Route path='/admin' element={<AdminDashboard/>}/>
+      <Route path='/login' element={<Login />}/>
+      <Route path="/home" element={<Home />} />
+      <Route path="/about-us" element={<AboutUs />} />
+      <Route path="/services" element={<Services/>} />
+      <Route path="/Contact-us" element={<ContactUs/>} />
+      <Route path="/registration" element={<RegisterForm/>} />
+      <Route path="/Workout-generator" element={<ProtectedRoute component={WorkoutGenerator} />} />
+      <Route path='/admin' element={<AdminDashboard/>}/>
 
       </Routes>
     </Router>
