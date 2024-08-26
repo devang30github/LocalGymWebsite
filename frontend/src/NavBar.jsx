@@ -37,6 +37,10 @@ const NavBar = () => {
     navigate('/login');
   };
 
+  const handleDashboard = () => {
+    navigate('/dashboard');
+  };
+
 
   return (
     <nav className="navbar">
@@ -56,7 +60,7 @@ const NavBar = () => {
           <div className="menu">
             <button className="menu-button">R</button>
             <div className="dropdown">
-              <button>Dashboard</button>
+              <button onClick={handleDashboard}>Dashboard</button>
               <button>Profile</button>
               <button onClick={handleLogout}>LogOut</button>
             </div>

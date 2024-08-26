@@ -1,3 +1,4 @@
+/*ExerciseFilter.jsx*/
 import React from 'react';
 
 const ExerciseFilter = ({ filters, onFilterChange }) => {

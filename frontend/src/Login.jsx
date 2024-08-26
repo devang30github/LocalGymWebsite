@@ -13,7 +13,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/home'); // Redirect to home if already logged in
+      navigate('/'); // Redirect to home if already logged in
     }
   }, [isAuthenticated, navigate]);
 
@@ -22,7 +22,7 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:3001/login', { email, password });
       login(response.data.token); // Store the token and update authentication state
-      navigate('/home'); // Redirect to home page
+      navigate('/'); // Redirect to home page
     } catch (error) {
       if (error.response) {
         setError(error.response.data);

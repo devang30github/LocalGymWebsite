@@ -1,5 +1,5 @@
-// models/User.js
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema({
   name: String,
@@ -11,10 +11,10 @@ const userSchema = new mongoose.Schema({
   membershipStartDate: Date,
   membershipExpiryDate: Date,
   otp: String,
-  otpExpiry: Date
+  otpExpiry: Date,
+  exercises: [{ type: Schema.Types.ObjectId, ref: 'Exercise' }] // Array of Exercise references
 });
 
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
-

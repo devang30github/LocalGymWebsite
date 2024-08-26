@@ -1,0 +1,70 @@
+/* src/Dashboard.css */
+.dashboard-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+h2 {
+  color: #444;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+}
+
+h3 {
+  color: #555;
+}
+
+p {
+  color: #666;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 15px;
+}
+
+.loading,
+.error {
+  text-align: center;
+  font-size: 18px;
+  color: #888;
+}
+
+.error {
+  color: red;
+}
+
+.user-stats,
+.recent-workouts,
+.performance-analytics,
+.goals {
+  margin-bottom: 20px;
+}
+
+.filter-section label,
+.goals label {
+  display: block;
+  margin: 5px 0;
+}
+
+input[type="date"],
+input[type="number"] {
+  margin-left: 10px;
+}
+
+input[type="number"] {
+  width: 100px;
+}

@@ -4,6 +4,7 @@ import ExerciseFilter from './ExerciseFilter';
 import AddExerciseForm from './AddExerciseForm';
 import TodaysWorkout from './TodaysWorkout';
 import './WorkoutPlans.css';
+import axios from 'axios';
 
 const defaultExercise = {
   name: "",
@@ -29,23 +30,48 @@ const WorkoutPlans = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetch('src/data/exercises.json')
-      .then(response => response.json())
-      .then(data => {
-        setWorkoutPlan(data);
+  const fetchExercises = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('No token found. Please log in.');
         setIsLoading(false);
-      })
-      .catch(error => {
-        setError('Error fetching exercise data');
-        setIsLoading(false);
+        return;
+      }
+
+      const response = await axios.get('http://localhost:3001/exercises', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+      setWorkoutPlan(response.data);
+      setIsLoading(false);
+    } catch (err) {
+      console.error('Error fetching exercises:', err);
+      setError('Error fetching exercise data');
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchExercises();
   }, []);
 
-  const handleAddExercise = () => {
+  const handleAddExercise = async () => {
     if (validateExercise(newExercise)) {
-      setWorkoutPlan([...workoutPlan, { ...newExercise, id: workoutPlan.length + 1 }]);
-      setNewExercise(defaultExercise);
+      try {
+        const token = localStorage.getItem('token');
+        await axios.post('http://localhost:3001/exercises/add', newExercise, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setNewExercise(defaultExercise);
+        fetchExercises(); // Refresh exercises after adding a new one
+      } catch (err) {
+        console.error('Error adding exercise:', err);
+        setError('Error adding exercise');
+      }
     } else {
       alert('Please fill out all fields correctly.');
     }
@@ -56,7 +82,33 @@ const WorkoutPlans = () => {
   };
 
   const handleAddToTodaysWorkout = (exercise) => {
-    setTodaysWorkout([...todaysWorkout, exercise]);
+    setTodaysWorkout([...todaysWorkout, { ...exercise, weight: 0, duration: 0 }]);
+  };
+
+  const handleSaveWorkout = async (workoutData) => {
+    if (todaysWorkout.length === 0) {
+      setError('Please add at least one exercise to your workout before saving.');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('No token found. Please log in.');
+      return;
+    }
+
+    try {
+      await axios.post('http://localhost:3001/workout/save', workoutData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert('Workout saved successfully!');
+      setTodaysWorkout([]); // Clear today's workout after saving
+    } catch (err) {
+      console.error('Error saving workout:', err);
+      setError('Error saving workout');
+    }
   };
 
   const handleFilterChange = (type, value) => {
@@ -124,9 +176,6 @@ const WorkoutPlans = () => {
             <option value="equipment">Equipment</option>
             <option value="bodyPart">Body Part</option>
           </select>
-          <button onClick={() => { /* Show/hide filter options */ }}>
-            <span>Filters</span>
-          </button>
         </div>
       </div>
 
@@ -135,7 +184,7 @@ const WorkoutPlans = () => {
       <div className="exercise-list">
         {filteredAndSortedExercises.map((exercise) => (
           <ExerciseCard
-            key={exercise.id}
+            key={exercise._id}
             exercise={exercise}
             onAddToPlan={handleAddToTodaysWorkout}
           />
@@ -145,12 +194,13 @@ const WorkoutPlans = () => {
       <AddExerciseForm
         newExercise={newExercise}
         setNewExercise={setNewExercise}
-        onAddExercise={handleAddExercise}
+        onSubmit={handleAddExercise}
       />
 
       <TodaysWorkout
         todaysWorkout={todaysWorkout}
-        onRemoveFromWorkout={(exerciseToRemove) => setTodaysWorkout(todaysWorkout.filter(ex => ex.id !== exerciseToRemove.id))}
+        onSaveWorkout={handleSaveWorkout}
+        onRemoveFromWorkout={(exerciseToRemove) => setTodaysWorkout(todaysWorkout.filter(ex => ex._id !== exerciseToRemove._id))}
       />
     </section>
   );

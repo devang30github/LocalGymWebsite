@@ -28,6 +28,7 @@ import WorkoutGenerator from './WorkoutGenerator';
 import AdminDashboard from './AdminDashboard';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
+import Dashboard from './Dashboard';
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
       <Route path="/registration" element={<RegisterForm/>} />
       <Route path="/Workout-generator" element={<ProtectedRoute component={WorkoutGenerator} />} />
       <Route path='/admin' element={<AdminDashboard/>}/>
+      <Route path='/dashboard' element={<Dashboard/>}/>
 
       </Routes>
     </Router>
