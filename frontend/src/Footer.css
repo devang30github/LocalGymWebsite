@@ -1,67 +1,105 @@
+/* Footer.css */
+
 .footer {
+  background-color: #333; /* Deep Charcoal for a modern, neutral backdrop */
+  color: #E0E0E0; /* Light Gray for readability */
+  padding: 60px 20px;
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
-  background-color: black;
-  color: #fff;
-  margin: 10px;
-  font-size: small;
+  flex-wrap: wrap;
+  font-family: 'Arial', sans-serif;
+  border-top: 5px solid #00BFA6; /* Bright Teal for a vibrant border */
 }
 
 .footer-section {
   flex: 1;
-  margin: 0px;
-  min-width: 150px;
+  margin: 15px;
+  background-color: #333; /* Deep Charcoal */
 }
 
 .footer-logo {
-  font-size: 1.5em;
-  margin-bottom: 10px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #FF4500; /* Bright Orange for emphasis */
+  margin-bottom: 15px;
+  background-color: #333; /* Deep Charcoal */
 }
 
 .footer-section h3 {
-  margin-bottom: 10px;
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #FF4500; /* Bright Orange */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background-color: #333; /* Deep Charcoal */
 }
 
 .footer-section p,
+.footer-section ul,
 .footer-section a {
-  color: #ccc;
+  color: #E0E0E0; /* Light Gray */
   text-decoration: none;
+  transition: color 0.3s ease, border 0.3s ease;
+  background-color: #333; /* Deep Charcoal */
 }
 
 .footer-section ul {
   list-style: none;
-  padding: 2;
+  padding: 0;
+  background-color: #333; /* Deep Charcoal */
 }
 
 .footer-section ul li {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  background-color: #333; /* Deep Charcoal */
 }
 
-.footer-section ul li a:hover,
 .footer-section a:hover {
-  color: #fff;
+  color: #FF6347; /* Slightly lighter orange on hover */
+  border-bottom: 1px solid #FF4500; /* Adds a subtle underline effect */
+}
+
+.social-icons {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 15px;
+  background-color: #333; /* Deep Charcoal */
 }
 
 .social-icons a {
-  margin-right: 10px;
-  color: #ccc;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
+  color: #FF4500; /* Bright Orange for social icons */
+  font-size: 28px;
+  margin-right: 15px;
+  transition: color 0.3s ease;
+  background-color: #333; /* Deep Charcoal */
 }
 
 .social-icons a:hover {
-  color: #fff;
+  color: #FF6347; /* Slightly lighter orange on hover */
 }
 
+.footer-legal {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background-color: #333; /* Deep Charcoal */
+}
 
 .footer-legal a {
-  color: #ccc;
-  margin-left: 10px;
+  color: #E0E0E0; /* Light Gray */
   text-decoration: none;
+  margin-right: 20px;
+  transition: color 0.3s ease;
+  background-color: #333; /* Deep Charcoal */
 }
 
 .footer-legal a:hover {
-  color: #fff;
+  color: #FF4500; /* Bright Orange on hover */
+}
+
+.footer-legal p {
+  margin: 0;
+  font-size: 14px;
+  background-color: #333; /* Deep Charcoal */
 }

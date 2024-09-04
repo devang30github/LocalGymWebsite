@@ -1,78 +1,98 @@
-*{
-    margin: 0px;
-    padding: 0px;
-    box-sizing: border-box;
-    border: none;
-    outline: none;
-    text-decoration: none;
-    text-transform: capitalize;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    /* transition: all 0.5s ease-in; */
-    scroll-behavior: smooth;
-    scroll-padding-top: 16vh;
-}
-form{
-    background-image: url('/LocalGymWebsite/public/formbg.jpg');
-    height: 100vh;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-.contact .contents{
-    display: flex;
-    background-color: #3a3a3a;
-    flex-wrap: wrap;
-    gap: 1rem;
-    height: 800px;
-    border-radius: 20px;
-}
-.contact .contents iframe{
-    height: 800px;
+/* ContactMap.css */
+
+/* Overall section styling */
+.contact {
+    background-color: #272033; /* Dark Blueish Gray background */
+    color: #E0E0E0; /* Light Gray text */
+    padding: 0.1px;
+    
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
     width: 100%;
-    flex:1 1 20rem;
-    object-fit: cover;
-}
-.contact .contents form{
-    height: 350px;
-    flex: 1 1 45rem;
-    align-items: center;
-    padding: 5rem 2rem;
-    position: relative;
-    top: 10px;
-}
-.contact .contents form h3{
-    text-transform: uppercase;
-    color: #fff;
-    font-size: 3.5rem;
-    padding: 1.5rem 0;
-    position: relative;
-    bottom: 90px;
-}
-.contact .contents form .inputbox{
+    /* Max width for the contact section */
+    margin: auto;
+    text-align: center;
+  }
+  
+  .contact .title {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #FF4500; /* Bright Orange for the title */
+  }
+  
+  .contact .title span {
+    font-weight: bold;
+  }
+  
+  .contact .contents {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    text-align: start;
-    padding-left: 10px;
-    margin-bottom: 2rem;
-    border: .1rem solid #c0dbea;
-    border-radius: 20px;
-}
-div .inputbox{
-    height: 50px;
-    width: 600px;
-    position: relative;
-    left: 10px;
-}
-textarea.inputbox{
-    height: 200px;
-}
-.btn{
-    font-size: 20px;
-    height: 50px;
-    width: 100px;
-    border-radius: 20px;
-    margin-top: 50px;
-}
-
-
-
+    gap: 20px;
+  }
+  
+  .contact iframe {
+    width: 100%;
+    height: 400px; /* Adjust height as needed */
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  }
+  
+  .contact form {
+    background-color: #1F1B24; /* Dark Purple background for the form */
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .contact form h3 {
+    font-size: 24px;
+    color: #FF4500; /* Bright Orange for the form heading */
+  }
+  
+  .contact .inputbox {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #00BFA6; /* Bright Teal border */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #1F1B24; /* Dark Purple background for input fields */
+    color: #E0E0E0; /* Light Gray text */
+  }
+  
+  .contact .inputbox::placeholder {
+    color: #CCCCCC; /* Placeholder text color */
+  }
+  
+  .contact .btn {
+    background-color: #00BFA6; /* Bright Teal button background */
+    color: #000000; /* Black text */
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 100%;
+  }
+  
+  .contact .btn:hover {
+    background-color: #009E8E; /* Slightly darker teal on hover */
+    transform: scale(1.05); /* Slightly increase size on hover */
+  }
+  
+  .contact .form-status {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #1AB394; /* Light Green for success messages */
+  }
+  
+  .contact .form-status.error {
+    color: #E74C3C; /* Soft Red for error messages */
+  }
+  

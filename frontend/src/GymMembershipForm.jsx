@@ -2,23 +2,47 @@ import React, { useState, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import axios from 'axios';
 import './GymMembershipForm.css';
 
 const GymMembershipForm = () => {
+  const qrCodeUrls = {
+    'Personal-Training-Beginner-1': '/qrcode_5rs.jpeg',
+    'personal_training_beginner-2': '/gym.png',
+    'personal_training_beginner-3': '/qrcode_beginner_12month.jpeg',
+    'personal_training_intermediate-1': '/qrcode_intermediate_1month.jpeg',
+    'personal_training_intermediate-2': '/qrcode_intermediate_6month.jpeg',
+    'personal_training_intermediate-3': '/qrcode_intermediate_12month.jpeg',
+    'personal_training_advanced-1': '/qrcode_advanced_1month.jpeg',
+    'personal_training_advanced-2': '/qrcode_advanced_6month.jpeg',
+    'personal_training_advanced-3': '/qrcode_advanced_12month.jpeg',
+    'membership_plan_basic-1': '/qrcode_basic_1month.jpeg',
+    'membership_plan_basic-2': '/qrcode_basic_6month.jpeg',
+    'membership_plan_basic-3': '/qrcode_basic_12month.jpeg',
+    'membership_plan_standard-1': '/qrcode_standard_1month.jpeg',
+    'membership_plan_standard-2': '/qrcode_standard_6month.jpeg',
+    'membership_plan_standard-3': '/qrcode_standard_12month.jpeg',
+    'membership_plan_premium-1': '/qrcode_premium_1month.jpeg',
+    'membership_plan_premium-2': '/qrcode_premium_6month.jpeg',
+    'membership_plan_premium-3': '/qrcode_premium_12month.jpeg',
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     membershipType: 'membership_plan_basic-1',
-    termsAgreed: false
+    termsAgreed: false,
   });
+  const [memberships, setMemberships] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [userId, setUserId] = useState('');
   const [otp, setOtp] = useState('');
   const [otpVerified, setOtpVerified] = useState(false);
- 
-  
+  const [formHeight, setFormHeight] = useState('650px'); // Initial height
+  const [qrCodeUrl, setQrCodeUrl] = useState(qrCodeUrls['membership_plan_basic-1']); // Initial QR code
+
   useEffect(() => {
     const savedState = localStorage.getItem('registrationState');
     if (savedState) {
@@ -33,17 +57,6 @@ const GymMembershipForm = () => {
     }
   }, []);
 
-  const [formHeight, setFormHeight] = useState('650px'); // Initial height
-
-  const resetRegistrationState = () => {
-    // Clear localStorage entirely
-    localStorage.clear();
-
-    // Clear component state
-    setUserId(null);
-    setRegistrationSuccess(false);
-  };
-
   useEffect(() => {
     if (registrationSuccess) {
       localStorage.setItem(
@@ -53,47 +66,107 @@ const GymMembershipForm = () => {
     }
   }, [registrationSuccess, userId]);
 
+  useEffect(() => {
+    // Fetch memberships from the server when the component mounts
+    const fetchMemberships = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/memberships'); // Make sure this endpoint matches your server route
+        setMemberships(response.data);
+        // Set the initial membership type if data is available
+        if (response.data.length > 0) {
+          setFormData(prevState => ({ ...prevState, membershipType: response.data[0]._id }));
+          setQrCodeUrl('/qrcode_5rs.jpeg'); // Set default QR code URL
+        }
+      } catch (error) {
+        console.error('Error fetching memberships:', error);
+      }
+    };
+
+    fetchMemberships();
+  }, []);
+
+
+  const resetRegistrationState = () => {
+    localStorage.clear();
+    setUserId(null);
+    setRegistrationSuccess(false);
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     });
+
+    // Update the QR code URL when membership type changes
+    if (name === 'membershipType') {
+      setQrCodeUrl(qrCodeUrls[value]);
+    }
   };
 
+  const validateName = (name) => /^[A-Za-z\s]+$/.test(name);
+
+  const validateEmail = (email) =>
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+
+  const validatePassword = (password) =>
+    password.length >= 8 && // Minimum length
+    /[A-Z]/.test(password) && // At least one uppercase letter
+    /[0-9]/.test(password) && // At least one digit
+    /[!@#$%^&*]/.test(password); // At least one special character
+
+  
   const handleRegister = async (e) => {
     e.preventDefault();
+    if (!validateName(formData.name)) {
+      alert('Name should only contain letters and spaces.');
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    if (!validatePassword(formData.password)) {
+      alert('Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.');
+      return;
+    }
     try {
       const response = await fetch('http://localhost:3001/register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
-
+  
       if (!response.ok) {
-        throw new Error('Registration failed');
+        const errorData = await response.json();
+        console.error('Registration error:', errorData);
+        throw new Error(errorData.message || 'Registration failed');
       }
-
+  
       const data = await response.json();
       setUserId(data.userId);
       setRegistrationSuccess(true);
       setFormHeight('1250px');
     } catch (error) {
       console.error('Error:', error);
-      alert('Registration failed');
+      alert(`Registration failed: ${error.message}`);
     }
   };
+  
 
   const handlePaymentConfirmation = async () => {
     try {
       const response = await fetch('http://localhost:3001/confirm-payment', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId, otp }) // Include OTP in the request
+        body: JSON.stringify({ userId, otp ,membershipTypeId: formData.membershipType,}), // Include OTP in the request
       });
 
       const data = await response.json();
@@ -163,30 +236,13 @@ const GymMembershipForm = () => {
           name="membershipType"
           value={formData.membershipType}
           onChange={handleChange}
+          required
         >
-          <optgroup label="Personal Training">
-            <option value="personal_training_beginner-1">PT-Beginner(1-month)</option>
-            <option value="personal_training_beginner-2">PT-Beginner(6-month)</option>
-            <option value="personal_training_beginner-3">PT-Beginner(12-month)</option>
-            <option value="personal_training_intermediate-1">PT-Intermediate(1-month)</option>
-            <option value="personal_training_intermediate-2">PT-Intermediate(6-month)</option>
-            <option value="personal_training_intermediate-3">PT-Intermediate(12-month)</option>
-            <option value="personal_training_advanced-1">PT-Advanced(1-month)</option>
-            <option value="personal_training_advanced-2">PT-Advanced(6-month)</option>
-            <option value="personal_training_advanced-3">PT-Advanced(12-month)</option>
-          </optgroup>
-          <optgroup label="Membership Plans">
-            <option value="membership_plan_basic-1">M-Basic(1-month)</option>
-            <option value="membership_plan_basic-2">M-Basic(6-month)</option>
-            <option value="membership_plan_basic-3">M-Basic(12-month)</option>
-            <option value="membership_plan_standard-1">M-Standard(1-month)</option>
-            <option value="membership_plan_standard-2">M-Standard(6-month)</option>
-            <option value="membership_plan_standard-3">M-Standard(12-month)</option>
-            <option value="membership_plan_premium-1">M-Premium(1-month)</option>
-            <option value="membership_plan_premium-2">M-Premium(6-month)</option>
-            <option value="membership_plan_premium-3">M-Premium(12-month)</option>
-          </optgroup>
-
+          {memberships.map((membership) => (
+            <option key={membership._id} value={membership.name}>
+              {membership.name} ({membership.durationInMonths}-month)
+            </option>
+          ))}
         </select>
 
         <label>
@@ -207,7 +263,7 @@ const GymMembershipForm = () => {
       {registrationSuccess && (
       <div className="payment-section">
         <h3>Scan the QR Code to Make Payment</h3>
-        <img src="/qrcode_5rs.jpeg" alt="QR Code" className="qr-code"/>
+        <img src={qrCodeUrl} alt="QR Code" className="qr-code"/>  {/* Display the dynamic QR code */}
         <p>After payment, enter the OTP sent to your email:</p>
         <input
           type="text"

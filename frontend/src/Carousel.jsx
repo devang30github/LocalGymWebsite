@@ -33,11 +33,11 @@ const Carousel = () => {
       <h1>Take a Tour of Our Gym</h1>
       <p>Get a glimpse of our state-of-the-art facilities and see why Fitness Gym is the premier choice for your fitness journey.</p>
       <div className="carousel-container">
-        <button className="carousel-button left" onClick={prevSlide}>&lt;</button>
         <div className="carousel-slide">
           <img src={images[currentIndex]} alt={`Slide ${currentIndex}`}
 className="carousel-image" />
         </div>
+        <button className="carousel-button left" onClick={prevSlide}>&lt;</button>
         <button className="carousel-button right" onClick={nextSlide}>&gt;</button>
       </div>
     </div>

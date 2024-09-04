@@ -1,48 +1,85 @@
-/* src/components/GymAmenities.css */
+/* GymAmenities.css */
+
 .gym-amenities {
+  background-color: #1F1B24; /* Dark purple background */
+  color: #E0E0E0; /* Light gray text */
+  padding: 60px 20px;
   text-align: center;
-  padding: 2rem 0;
-  
-  
+  font-family: 'Arial', sans-serif;
+  border-top: 5px solid #00BFA6;
 }
 
 .gym-amenities h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  color: #FF4500; /* Bright orange for headings */
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .gym-amenities p {
-  font-size: 1rem;
-  margin-bottom: 2rem;
-  color: #666;
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  color: #E0E0E0; /* Light gray text */
+  line-height: 1.6;
 }
 
 .amenities-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 20px; /* Spacing between amenity cards */
+  background-color: transparent; /* Ensure the container has no background */
 }
 
 .amenity-card {
-  
-  
-  border-radius: 8px;
-  padding: 1rem;
-  
+  background-color: #272033; /* Dark blueish gray */
+  color: #E0E0E0; /* Light gray text */
+  border-radius: 10px;
+  padding: 20px;
   width: 300px;
-  text-align: left;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
 }
 
-
+.amenity-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
 
 .amenity-card h3 {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-  color: white;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #FF4500; /* Bright orange for titles */
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.amenity-card h3 svg {
+  margin-right: 10px; /* Spacing between icon and title */
 }
 
 .amenity-card p {
   font-size: 1rem;
-  color: #666;
+  color: #E0E0E0; /* Light gray text */
+  text-align: center;
+  line-height: 1.5;
+  flex-grow: 1; /* Ensure description takes up available space */
+}
+
+@media (max-width: 768px) {
+  .amenities-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .amenity-card {
+    width: 100%; /* Full width on smaller screens */
+  }
 }

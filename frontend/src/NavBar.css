@@ -1,18 +1,22 @@
-/* src/Navbar.css */
+/* NavBar.css */
+
 .navbar {
+  background: linear-gradient(90deg, #000000, #555); /* Darker gradient background */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  background-color: #333;
-  color: white;
+  padding: 10px 20px;
   position: sticky;
-  z-index: 10;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
+  color: #fff;
+  background-color: transparent; /* Remove black background */
 }
 
 .logo {
@@ -21,81 +25,100 @@
   margin-right: 10px;
 }
 
-.navbar-logo h1 {
-  color: red;
-  font-size: 20px;
-  margin-left: 10px;
+.navbar h1 {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  margin: 0;
+  color: #FF4500; /* Gold color for the gym name */
 }
 
 .navbar-links {
-  list-style-type: none;
   display: flex;
-  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .navbar-links li {
-  display: inline;
+  margin: 0 15px;
 }
 
 .navbar-links button {
   background: none;
-  color: white;
   border: none;
-  font-size: 16px;
+  color: #fff;
+  font-size: 18px;
   cursor: pointer;
+  padding: 10px;
+  transition: color 0.3s ease;
 }
 
+.navbar-links button:hover {
+  color: #FF4500;
+}
+.navbar button:active,
+.navbar a:active {
+  background-color: #444;
+}
 .navbar-right {
   display: flex;
   align-items: center;
 }
 
-.navbar-right button {
-  background: none;
-  color: white;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  margin-left: 10px;
-}
 
 .menu {
   position: relative;
-  z-index: 10;
+  z-index: 1010; /* Ensure the dropdown menu is above other content */
 }
 
 .menu-button {
-  background-color: #888;
-  color: white;
+  background: linear-gradient(135deg,#FFE53B, #FF2525);;
+  color: #fff;
   border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  padding: 8px 12px;
+  font-size: 18px;
   cursor: pointer;
-  font-size: 20px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+.login-button {
+  background-color: #FF4500;
+}
+.menu-button:hover {
+  background-color: #FF6347; /* Lighter orange on hover */
 }
 
 .dropdown {
   position: absolute;
-  right: 0;
   top: 100%;
-  background-color: #444;
+  right: 0;
+  background-color: #333; /* Ensure dropdown background matches navbar */
+  border-radius: 4px;
   display: none;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem;
-  border-radius: 5px;
-  z-index: 10;
-}
-
-.menu:hover .dropdown {
-  display: flex;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1020; /* Ensure the dropdown is above other content */
 }
 
 .dropdown button {
-  background: none;
-  color: white;
+  background-color: #333; /* Match dropdown background */
+  color: #fff;
   border: none;
-  cursor: pointer;
+  padding: 10px 15px;
   text-align: left;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 0;
+}
+
+.dropdown button:hover {
+  background-color: #444; /* Slightly lighter background on hover */
+}
+
+.menu:hover .dropdown,
+.dropdown:hover {
+  display: flex;
 }

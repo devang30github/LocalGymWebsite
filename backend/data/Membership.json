@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Personal-Training-Beginner-1",
+    "durationInMonths": 1,
+    "price": 1500,
+    "features": ["Access to gym", "Basic training sessions"]
+  },
+  {
+    "name": "Personal-Training-Beginner-2",
+    "durationInMonths": 6,
+    "price": 8000,
+    "features": ["Access to gym", "Basic training sessions"]
+  },
+  {
+    "name": "Personal-Training-Beginner-3",
+    "durationInMonths": 12,
+    "price": 15000,
+    "features": ["Access to gym", "Basic training sessions"]
+  },
+  {
+    "name": "Personal-Training-Intermediate-1",
+    "durationInMonths": 1,
+    "price": 1800,
+    "features": ["Access to gym","Customized training plans","Dietary guidance"]
+  },
+  {
+    "name": "Personal-Training-Intermediate-2",
+    "durationInMonths": 6,
+    "price": 9500,
+    "features": ["Access to gym","Customized training plans","Dietary guidance"]
+  },
+  {
+    "name": "Personal-Training-Intermediate-3",
+    "durationInMonths": 12,
+    "price": 18000,
+    "features": ["Access to gym","Customized training plans","Dietary guidance"]
+  },
+  {
+    "name":"Personal-Training-Advanced-3",
+    "durationInMonths":1,
+    "price":2000,
+    "features": ["Access to all gym facilities","Advanced techniques plans","Nutrition support guidance"]
+  },
+  {
+    "name":"Personal-Training-Advanced-3",
+    "durationInMonths":6,
+    "price":10500,
+    "features":["Access to all gym facilities","Advanced techniques plans","Nutrition support guidance"]
+  },
+  {
+    "name":"Personal-Training-Advanced-3",
+    "durationInMonths":12,
+    "price":20000,
+    "features":["Access to all gym facilities","Advanced techniques plans","Nutrition support guidance"]
+  }
+]

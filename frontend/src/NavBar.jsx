@@ -46,7 +46,7 @@ const NavBar = () => {
     <nav className="navbar">
       <div className="navbar-logo">
         <img src="/gym.png" alt="Gym Logo" className="logo" />
-        <h1>SIDDHIVINAYAK GYM</h1>
+        <h1>GymPro Manager</h1>
       </div>
       <ul className="navbar-links">
         <li><button onClick={handleHomeClick}>Home</button></li>
@@ -66,8 +66,8 @@ const NavBar = () => {
             </div>
           </div>
         ) : (
-          <div>
-            <button onClick={handleLogin}>Login</button>
+          <div >
+            <button className='menu-button' onClick={handleLogin}>Login</button>
           </div>
         )}
       </div>

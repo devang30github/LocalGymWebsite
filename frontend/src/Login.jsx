@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
 import NavBar from './NavBar';
+import Footer from './Footer';
+import './Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -33,13 +35,13 @@ const Login = () => {
   };
 
   return (
+    <>
+    <NavBar/>
     <div className="login-container">
-      <NavBar/>
-      <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         {error && <div className="error">{error}</div>}
+        <label htmlFor="email">Email</label>
         <div className="input-container">
-          <label htmlFor="email">Email</label>
           <input 
             type="email" 
             id="email" 
@@ -48,8 +50,8 @@ const Login = () => {
             required 
           />
         </div>
+        <label htmlFor="password">Password</label>
         <div className="input-container">
-          <label htmlFor="password">Password</label>
           <input 
             type="password" 
             id="password" 
@@ -61,6 +63,8 @@ const Login = () => {
         <button type="submit" className="login-button">Login</button>
       </form>
     </div>
+    <Footer/>
+    </>
   );
 };
 

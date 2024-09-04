@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
   password: String,
-  membershipType: String,
+  membershipType: { type: Schema.Types.ObjectId, ref: 'Membership' },
   termsAgreed: Boolean,
   paymentConfirmed: { type: Boolean, default: false },
   membershipStartDate: Date,

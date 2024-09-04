@@ -10,7 +10,7 @@ const exerciseSchema = new mongoose.Schema({
   reps: Number,
   restPeriod: String,
   videoUrl: String,
-  createdBy: { type: Schema.Types.ObjectId, ref: 'User' }
+  createdBy: { type: String, ref: 'User' }
 });
 
 const Exercise = mongoose.model('Exercise', exerciseSchema);

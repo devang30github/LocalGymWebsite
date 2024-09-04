@@ -9,8 +9,10 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const User = require('./models/User');
+const Membership = require('./models/Membership');
 const Exercise = require('./models/Exercise');
 const WorkoutSession= require('./models/WorkoutSession');
+const ContactMessage=require('./models/ContactMessage');
 require('dotenv').config();
 
 const app = express();
@@ -23,32 +25,6 @@ const mailUser = process.env.EMAIL_USER;
 const mailPass = process.env.EMAIL_PASS;
 
 mongoose.connect(mongoURI);
-
-// Calculate membership end date
-const calculateMembershipEndDate = (membershipType) => {
-  const duration = {
-    'personal_training_basic-1': 1,
-    'personal_training_standard-1': 1,
-    'personal_training_premium-1': 1,
-    'personal_training_basic-2': 6,
-    'personal_training_standard-2': 6,
-    'personal_training_premium-2': 6,
-    'personal_training_basic-3': 12,
-    'personal_training_standard-3': 12,
-    'personal_training_premium-3': 12,
-    'membership_plan_basic-1': 1,
-    'membership_plan_standard-1': 1,
-    'membership_plan_premium-1': 1,
-    'membership_plan_basic-2': 6,
-    'membership_plan_standard-2': 6,
-    'membership_plan_premium-2': 6,
-    'membership_plan_basic-3': 12,
-    'membership_plan_standard-3': 12,
-    'membership_plan_premium-3': 12,
-  }[membershipType] || 1;
-
-  return new Date(Date.now() + duration * 30 * 24 * 60 * 60 * 1000);
-};
 
 // Email configuration
 const transporter = nodemailer.createTransport({
@@ -79,8 +55,34 @@ const seedExercises = async () => {
   }
 };
 
+
+const seedMemberships = async () => {
+  try {
+    const membershipsFilePath = path.join(__dirname, 'data/Membership.json'); // Adjust path if needed
+    const membershipsData = JSON.parse(fs.readFileSync(membershipsFilePath, 'utf8'));
+
+    for (const membership of membershipsData) {
+      // Check if the membership already exists
+      const exists = await Membership.findOne({ name: membership.name });
+
+      if (exists) {
+        continue; // Skip the current membership if it already exists
+      }
+
+      // Insert the membership if it does not exist
+      await Membership.create(membership);
+      console.log(`Membership plan "${membership.name}" seeded successfully.`);
+    }
+
+  } catch (error) {
+    console.error('Error seeding membership data:', error);
+  }
+};
+
+
 // Run the seeding process
 seedExercises();
+seedMemberships();
 
 // Authentication Middleware
 const authMiddleware = async (req, res, next) => {
@@ -98,7 +100,7 @@ const authMiddleware = async (req, res, next) => {
     if (!user) {
       return res.status(401).send('User not found');
     }
-    req.user = user;
+    req.user = { email: user.email };
     next();
   } catch (error) {
     console.error('Error in authMiddleware:', error.message);  // Log the exact error message
@@ -155,15 +157,13 @@ app.post('/register', async (req, res) => {
   const { name, email, password, membershipType, termsAgreed } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const expiryDate = calculateMembershipEndDate(membershipType);
+    //const expiryDate = calculateMembershipEndDate(membershipType);
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
       membershipType,
       termsAgreed,
-      membershipStartDate: Date.now(),
-      membershipExpiryDate: expiryDate,
     });
     const savedUser = await newUser.save();
 
@@ -180,17 +180,36 @@ app.post('/register', async (req, res) => {
 
 // Confirm payment
 app.post('/confirm-payment', async (req, res) => {
-  const { userId, otp } = req.body;
+  const { userId, otp,membershipTypeId } = req.body;
   try {
     const user = await User.findById(userId);
     if (!user) return res.status(404).send('User not found.');
     if (user.otp !== otp) return res.status(400).send('Invalid OTP.');
     if (Date.now() > user.otpExpiry) return res.status(400).send('OTP expired.');
     user.paymentConfirmed = true;
+    // Link the membership type
+    const membership = await Membership.findById(membershipTypeId);
+    if (!membership) {
+      return res.status(400).json({ message: 'Invalid membership type' });
+    }
+    user.membershipType = membership._id; // Set single membership type
+    user.membershipStartDate = new Date();
+    user.membershipExpiryDate = new Date(new Date().setMonth(new Date().getMonth() + membership.durationInMonths));
+
     await user.save();
     res.json({ message: 'Payment confirmed and user registration completed.' });
   } catch (error) {
     res.status(500).send(error);
+  }
+});
+
+// Route to fetch all memberships
+app.get('/memberships', async (req, res) => {
+  try {
+    const memberships = await Membership.find(); // Fetch all memberships
+    res.json(memberships);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching memberships', error });
   }
 });
 
@@ -204,7 +223,7 @@ app.post('/login', async (req, res) => {
     if (new Date() > user.membershipExpiryDate) return res.status(403).send('Membership expired.');
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).send('Invalid credentials.');
-    const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: '2h' });
     res.json({ token });
   } catch (error) {
     res.status(500).send(error);
@@ -212,17 +231,17 @@ app.post('/login', async (req, res) => {
 });
 // Fetch exercises for the user
 app.get('/exercises', authMiddleware, async (req, res) => {
-  const userId = req.user._id; // Extracted from the JWT token
+  const userEmail = req.user.email; // Extracted from the JWT token
   try {
     // Fetch the user with their associated exercises
-    const user = await User.findById(userId).populate('exercises');
+    const user = await User.findOne({email:userEmail}).populate('exercises');
     if (!user) return res.status(404).send('User not found.');
 
     // Fetch the default exercises available to all users
     const defaultExercises = await Exercise.find({ createdBy: null });
 
     // Fetch exercises created by the specific user
-    const userExercises = await Exercise.find({ createdBy: userId });
+    const userExercises = await Exercise.find({ createdBy: userEmail});
     /*const userExercises = user.exercises.filter(exercise => 
       exercise.createdBy.equals(userId)
     );*/
@@ -239,12 +258,12 @@ app.get('/exercises', authMiddleware, async (req, res) => {
 
 // Add a new exercise to the user's list or create a new exercise and assign it to the user
 app.post('/exercises/add', authMiddleware, async (req, res) => {
-  const userId = req.user._id; // Get the user ID from the authMiddleware
+  const userEmail = req.user.email; // Get the user ID from the authMiddleware
   const { name, bodyPart, equipment, difficulty, sets, reps, restPeriod, videoUrl } = req.body;
 
   try {
     // Find if the exercise already exists for the user
-    let exercise = await Exercise.findOne({ name, user: userId });
+    let exercise = await Exercise.findOne({ name, createdBy: userEmail });
 
     // If exercise doesn't exist, create a new one
     if (!exercise) {
@@ -257,13 +276,13 @@ app.post('/exercises/add', authMiddleware, async (req, res) => {
         reps,
         restPeriod,
         videoUrl,
-        createdBy: userId // Assign the exercise to the current user
+        createdBy: userEmail // Assign the exercise to the current user
       });
       await exercise.save();
     }
 
     // Find the user by their ID
-    const user = await User.findById(userId);
+    const user = await User.findOne({email:userEmail});
     if (!user) return res.status(404).send('User not found.');
 
     // If the exercise is not already in the user's list, add it
@@ -279,60 +298,20 @@ app.post('/exercises/add', authMiddleware, async (req, res) => {
   }
 });
 
-// Add exercise to user's list
-/*app.post('/exercises/add', authMiddleware, async (req, res) => {
-  const userId = req.user._id;
-  const { exerciseId } = req.body;
-  try {
-    const user = await User.findById(userId);
-    if (!user) return res.status(404).send('User not found.');
-    if (!user.exercises.includes(exerciseId)) {
-      user.exercises.push(exerciseId);
-      await user.save();
-    }
-    res.json({ message: 'Exercise added to user\'s list.' });
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-*/
-//save todays workout
-/*Save today's workout
-app.post('/workout/save', authMiddleware, async (req, res) => {
-  const userId = req.user._id;
-  const { name, exercises, conditions, subjectiveFeedback } = req.body;
-
-  try {
-    const workoutSession = new WorkoutSession({
-      user: userId,
-      name,
-      exercises,
-      conditions,
-      subjectiveFeedback
-    });
-
-    await workoutSession.save();
-    res.json({ message: 'Workout session saved successfully!', workoutSession });
-  } catch (error) {
-    console.error('Error saving workout session:', error);
-    res.status(500).send('An error occurred while saving the workout session.');
-  }
-});
-*/
 // Save a Workout Session
 app.post('/workout/save', authMiddleware,async (req, res) => {
   try {
     const { workoutName, exercises, conditions, subjectiveFeedback } = req.body;
 
     // Check if the user is authenticated
-    const userId = req.user._id; // Assuming you have a middleware to attach the userId to the request
-    if (!userId) {
+    const userEmail = req.user.email; // Assuming you have a middleware to attach the userId to the request
+    if (!userEmail) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
     // Create a new workout session
     const newWorkoutSession = new WorkoutSession({
-      user: userId,
+      user: userEmail,
       name: workoutName,
       exercises: exercises.map(ex => ({
         ...ex,
@@ -365,10 +344,10 @@ app.post('/workout/save', authMiddleware,async (req, res) => {
 
 // Remove exercise from user's list
 app.post('/exercises/remove', authMiddleware, async (req, res) => {
-  const userId = req.user._id;
+  const userEmail = req.user.email;
   const { exerciseId } = req.body;
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(userEmail);
     if (!user) return res.status(404).send('User not found.');
     user.exercises = user.exercises.filter(id => !id.equals(exerciseId));
     await user.save();
@@ -380,10 +359,10 @@ app.post('/exercises/remove', authMiddleware, async (req, res) => {
 
 // Fetch user's workout history
 app.get('/workout/history', authMiddleware, async (req, res) => {
-  const userId = req.user._id;
+  const userEmail = req.user.email;
   
   try {
-    const workoutHistory = await WorkoutSession.find({ user: userId }).sort({ date: -1 });
+    const workoutHistory = await WorkoutSession.find({ user: userEmail }).sort({ date: -1 });
     res.json(workoutHistory);
   } catch (error) {
     console.error('Error fetching workout history:', error);
@@ -393,10 +372,10 @@ app.get('/workout/history', authMiddleware, async (req, res) => {
 
 // Fetch user stats
 app.get('/user/stats', authMiddleware, async (req, res) => {
-  const userId = req.user._id;
+  const userEmail = req.user.email;
   
   try {
-    const workoutSessions = await WorkoutSession.find({ user: userId });
+    const workoutSessions = await WorkoutSession.find({ user: userEmail });
     const totalWorkouts = workoutSessions.length;
     const totalTime = workoutSessions.reduce((sum, session) => sum + session.duration, 0);
     const avgDuration = totalWorkouts ? (totalTime / totalWorkouts) : 0;
@@ -411,6 +390,27 @@ app.get('/user/stats', authMiddleware, async (req, res) => {
   } catch (error) {
     console.error('Error fetching user stats:', error);
     res.status(500).send('An error occurred while fetching user stats.');
+  }
+});
+
+// Route to handle contact form submission
+app.post('/api/contact', async (req, res) => {
+  try {
+      const { name, email, subject, message } = req.body;
+
+      // Validate input
+      if (!name || !email || !subject || !message) {
+          return res.status(400).json({ error: 'All fields are required' });
+      }
+
+      // Save the message to the database
+      const newMessage = new ContactMessage({ name, email, subject, message });
+      await newMessage.save();
+
+      res.status(200).json({ message: 'Contact message submitted successfully' });
+  } catch (error) {
+      console.error('Error submitting contact message:', error);
+      res.status(500).json({ error: 'An error occurred while submitting the contact message' });
   }
 });
 

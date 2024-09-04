@@ -1,16 +1,20 @@
+/* ServicesHeading.css */
+
 .fitness-potential-section {
-  background-color: #1a1a1a; /* Dark background color */
-  color: #fff; /* White text color */
-  text-align: center;
-  padding: 50px;
+  background-color: #1F1B24;
+  color:#E0E0E0 ;
+  padding: 20px; /* Adds some padding around the content */
+  text-align: center; /* Centers the text horizontally */
 }
 
 .fitness-potential-section h1 {
-  font-size: 3em;
-  margin-bottom: 20px;
+  margin: 0;
+  padding: 10px 0;
+  font-size: 2.5rem; /* Adjusts the font size for the heading */
 }
 
 .fitness-potential-section p {
-  font-size: 1.2em;
-  color: #ccc; /* Light gray text color */
+  margin: 0;
+  padding: 10px 0;
+  font-size: 1.2rem; /* Adjusts the font size for the paragraph */
 }

@@ -1,117 +1,112 @@
-/* TodaysWorkout.css */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
-}
-
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 2rem;
-  /* background-color: #fff; */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+/* Scoped TodaysWorkout Styles */
+.container.todays-workout {
+  max-width: 1100px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #1e1e1e; /* Dark gray background for the container */
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6); /* Soft shadow */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Light border for separation */
+  color: #fff; /* Ensure text is readable against the dark background */
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4rem;
+  margin-bottom: 25px;
+  text-align: center;
 }
 
-.title {
-  font-size: 2rem;
+.header label {
+  font-size: 1.5rem;
+  font-weight: 500;
   color: #fff;
-  cursor: pointer;
 }
 
 .workout-name-input {
-  font-size: 2rem;
-  font-weight: bold;
+  display: block;
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
-  background-color: #3a3a3a;
-  color: #ccc;
+  padding: 12px;
+  margin-top: 15px;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: #333; /* Dark background for input */
+  color: #fff;
+  outline: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.workout-name-input:focus {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
 .exercise-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin: 30px 0;
 }
 
-.exercise-card {
-  padding: 1rem;
-  background-color: #1a1a1a;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
 
-.exercise-details h3 {
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
-  color: #fff;
-}
 
-.exercise-meta span {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  color: #fff;
-}
-
-.exercise-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.exercise-actions button {
-  padding: 0.5rem 1rem;
+/* Scoped Button Styles */
+.container.todays-workout .exercise-card-wrapper button,
+.container.todays-workout button {
+  
+  margin: 5px;
+  padding: 5px 10px; /* Reduced padding for smaller button size */
+  font-size: 1rem; /* Reduced font size */
+ /* background: linear-gradient(135deg,#f44336, #2072a8);*/
+  background: linear-gradient(135deg,#f44336, #2072a8);
+  color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  background-color: #3a3a3a;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.container.todays-workout .exercise-card-wrapper button:hover,
+.container.todays-workout button:hover {
+  background: linear-gradient(135deg,#FFE53B, #FF2525);
+  transform: translateY(-2px);
+}
+
+.container.todays-workout .exercise-card-wrapper button:active,
+.container.todays-workout button:active {
+  background: linear-gradient(135deg, #45a2c1, #186086);
+  transform: translateY(0);
+}
+
+.conditions, .subjective-feedback {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.conditions label, .subjective-feedback label {
+  font-size: 1.1rem;
   color: #fff;
-  transition: background-color 0.3s;
 }
 
-.exercise-actions button:hover {
-  background-color: #46494c;
+.conditions input, .subjective-feedback input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: #333; /* Dark background for inputs */
+  color: #fff;
+  outline: none;
+  transition: box-shadow 0.3s ease;
 }
 
-.exercise-actions a button {
-  background-color: #3a3a3a;
+.conditions input:focus, .subjective-feedback input:focus {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
-.exercise-actions a button:hover {
-  background-color: #46494c;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+@media (max-width: 600px) {
+  .conditions, .subjective-feedback {
+    grid-template-columns: 1fr;
   }
 
-  .exercise-list {
-    grid-template-columns: 1fr;
+  .container.todays-workout button {
+    font-size: 1.1rem;
   }
 }

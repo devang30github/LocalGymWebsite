@@ -5,18 +5,18 @@ import './TrainingPlans.css';
 const plans = [
   {
     title: "Beginner",
-    description: "Get started on your fitness journey with our beginner plan.",
-    prices: ["$99 / month", "$249 / quarter", "$449 / 6 months", "$799 / year"],
+    description: "Personalized workout plans and basic training sessions.",
+    prices: ["₹1500 / month", "₹8000 / 6 months", "₹15,000 / year"],
   },
   {
     title: "Intermediate",
-    description: "Take your fitness to the next level with our intermediate plan.",
-    prices: ["$149 / month", "$399 / quarter", "$699 / 6 months", "$1,199 / year"],
+    description: "Customized training plans with dietary guidance.",
+    prices: ["₹1800 / month", "₹9,500 / 6 months", "₹18,000 / year"],
   },
   {
     title: "Advanced",
-    description: "Reach your fitness goals with our advanced plan.",
-    prices: ["$199 / month", "$549 / quarter", "$999 / 6 months", "$1,799 / year"],
+    description: "Comprehensive personal training with advanced techniques and nutrition support.",
+    prices: ["₹2000 / month", "₹10,500 / 6 months", "₹20,000 / year"],
   },
 ];
 

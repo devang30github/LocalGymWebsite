@@ -1,65 +1,84 @@
+/* TrainingPlans.css */
+
+
+
 .training-plans-section {
-  background-color: #1a1a1a; /* Dark background color */
-  color: #fff; /* White text color */
+  padding: 50px 20px;
   text-align: center;
-  padding: 50px;
+  background-color: #1F1B24;
+  color:#E0E0E0 ;
+  border-top: 5px solid #00BFA6;
 }
 
 .training-plans-section h1 {
-  font-size: 2.5em;
+  font-size: 2.8rem;
   margin-bottom: 10px;
 }
 
 .training-plans-section p {
-  font-size: 1.2em;
-  color: #ccc; /* Light gray text color */
-  margin-bottom: 40px;
+  font-size: 1.2rem;
+  margin-bottom: 30px;
 }
 
 .plans-container {
   display: flex;
-  justify-content: space-around;
   flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  background:  #1F1B24;
 }
 
 .plan-card {
-  background-color: #3a3a3a; /* Darker card background */
+  background-color:#272033;
   border-radius: 10px;
-  padding: 10px;
-  width: 20%;
-  margin: 5px;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-top: 4px solid #FF4500;
+}
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .plan-card h2 {
-  font-size: 1.5em;
+  font-size: 1.8rem;
   margin-bottom: 10px;
 }
 
 .plan-card p {
-  font-size: 1em;
-  color: #ccc;
-  margin: 5px 0;
+  font-size: 1rem;
+  margin: 10px 0;
 }
+.prices {
+  background: #272033;
 
+}
 .prices p {
-  font-size: 1.2em;
-  font-weight: bold;
+  margin: 5px 0;
+  font-weight: bold; 
+  color:#E0E0E0 ;
 }
 
 .plan-card button {
-  
-  color: #000;
+  background-color:#00BFA6;
+  color:black ;
   border: none;
   border-radius: 5px;
-  padding: 10px;
+  padding: 10px 20px;
   cursor: pointer;
-  font-size: 1em;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
 
 .plan-card button:hover {
-  background-color: cyan;
+  background-color: #009E8E;
+}
+
+@media (max-width: 768px) {
+  .plan-card {
+    width: 100%; /* Full width for smaller screens */
+  }
 }

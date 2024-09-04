@@ -6,18 +6,18 @@ import './MembershipPlans.css';
 const plans = [
   {
     title: "Basic",
-    description: "Access to cardio equipment and basic gym facilities.",
-    prices: ["$49 / month", "$129 / quarter", "$229 / 6 months", "$399 / year"],
+    description: "Access to basic gym facilities.",
+    prices: ["₹800 / month",  "₹3600 / 6 months", "₹6000 / year"],
   },
   {
     title: "Standard",
-    description: "Access to cardio equipment, weight room, and steam room.",
-    prices: ["$79 / month", "$199 / quarter", "$349 / 6 months", "$599 / year"],
+    description: "Access to cardio equipment and weight room",
+    prices: ["₹1000 / month",  "₹4800 / 6 months", "₹7200 / year"],
   },
   {
     title: "Premium",
-    description: "Access to all gym facilities, including the pool and spa.",
-    prices: ["$99 / month", "$249 / quarter", "$449 / 6 months", "$799 / year"],
+    description: "Access to all gym facilities, including the steam room and spa.",
+    prices: ["₹1200 / month", "₹5400 / 6 months", "₹9600 / year"],
   },
   
 ];
