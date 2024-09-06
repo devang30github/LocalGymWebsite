@@ -62,7 +62,7 @@ const AdminDashboard = () => {
             <tr key={registration._id}>
               <td>{registration.name}</td>
               <td>{registration.email}</td>
-              <td>{registration.membershipType}</td>
+              <td>{registration.membershipType ? registration.membershipType.name : 'N/A'}</td>
               <td>
                 <button onClick={() => handleSendOtp(registration._id)}>
                   Send OTP

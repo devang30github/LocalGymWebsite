@@ -1,70 +1,92 @@
-/* src/Dashboard.css */
+/* Dashboard.css */
 .dashboard-container {
   padding: 20px;
-  font-family: Arial, sans-serif;
+  background-color: #1F1B24; /* Dark background */
+  color: #E0E0E0; /* Primary text color */
+  min-height: 100vh;
 }
 
-h1 {
+.dashboard-container h1 {
   text-align: center;
-  color: #333;
-}
-
-h2 {
-  color: #444;
-  border-bottom: 2px solid #007bff;
-  padding-bottom: 5px;
-}
-
-h3 {
-  color: #555;
-}
-
-p {
-  color: #666;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin: 10px 0;
-  padding: 15px;
-}
-
-.loading,
-.error {
-  text-align: center;
-  font-size: 18px;
-  color: #888;
-}
-
-.error {
-  color: red;
-}
-
-.user-stats,
-.recent-workouts,
-.performance-analytics,
-.goals {
+  color: #FF4500; /* Accent color for main heading */
   margin-bottom: 20px;
 }
 
-.filter-section label,
-.goals label {
-  display: block;
+.workout-history {
+  background-color: #272033; /* Card background */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.workout-history h2 {
+  color: #E0E0E0; /* Keep secondary headings light gray */
+  margin-bottom: 15px;
+  border-bottom: 2px solid #FF4500; /* Accent border */
+  padding-bottom: 5px;
+}
+
+.workout-history ul {
+  list-style-type: none; /* Remove default list styling */
+  padding: 0;
+}
+
+.workout-history li {
+  background-color: #1F1B24; /* Slightly darker card color */
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  border-left: 4px solid #FF4500; /* Accent border on the left */
+}
+
+.workout-history li:hover {
+  background-color: #272033; /* Highlight on hover */
+}
+
+.workout-history p {
   margin: 5px 0;
 }
 
-input[type="date"],
-input[type="number"] {
-  margin-left: 10px;
+.workout-history p strong {
+  color: #FF4500; /* Highlight strong text */
 }
 
-input[type="number"] {
-  width: 100px;
+.workout-history li ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.workout-history li ul li {
+  background: none; /* Remove background for nested list items */
+  padding: 0;
+  border: none;
+}
+
+.workout-history li ul li p {
+  color: #E0E0E0; /* Ensure nested lists have proper text color */
+}
+
+.workout-history li ul li p strong {
+  color: #00BFA6; /* Accent color for exercise details */
+}
+
+@media (max-width: 600px) {
+  .dashboard-container {
+    padding: 10px;
+  }
+
+  .workout-history {
+    padding: 15px;
+  }
+
+  .workout-history h2 {
+    font-size: 18px;
+  }
+
+  .workout-history li {
+    padding: 10px;
+  }
 }

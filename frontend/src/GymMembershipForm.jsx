@@ -2,20 +2,21 @@ import React, { useState, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './GymMembershipForm.css';
 
 const GymMembershipForm = () => {
   const qrCodeUrls = {
     'Personal-Training-Beginner-1': '/qrcode_5rs.jpeg',
-    'personal_training_beginner-2': '/gym.png',
-    'personal_training_beginner-3': '/qrcode_beginner_12month.jpeg',
-    'personal_training_intermediate-1': '/qrcode_intermediate_1month.jpeg',
-    'personal_training_intermediate-2': '/qrcode_intermediate_6month.jpeg',
-    'personal_training_intermediate-3': '/qrcode_intermediate_12month.jpeg',
-    'personal_training_advanced-1': '/qrcode_advanced_1month.jpeg',
-    'personal_training_advanced-2': '/qrcode_advanced_6month.jpeg',
-    'personal_training_advanced-3': '/qrcode_advanced_12month.jpeg',
+    'Personal-Training-Beginner-2': '/qrcode_5rs.jpeg',
+    'Personal-Training-Beginner-3': '/qrcode_5rs.jpeg',
+    'Personal-Training-Intermediate-1': '/qrcode_5rs.jpeg',
+    'Personal-Training-Intermediate-2': '/qrcode_5rs.jpeg',
+    'Personal-Training-Intermediate-3': '/qrcode_5rs.jpeg',
+    'Personal-Training-Advanced-1': '/qrcode_5rs.jpeg',
+    'Personal-Training-Advanced-2': '/qrcode_5rs.jpeg',
+    'Personal-Training-Advanced-3': '/qrcode_5rs.jpeg',
     'membership_plan_basic-1': '/qrcode_basic_1month.jpeg',
     'membership_plan_basic-2': '/qrcode_basic_6month.jpeg',
     'membership_plan_basic-3': '/qrcode_basic_12month.jpeg',
@@ -24,7 +25,7 @@ const GymMembershipForm = () => {
     'membership_plan_standard-3': '/qrcode_standard_12month.jpeg',
     'membership_plan_premium-1': '/qrcode_premium_1month.jpeg',
     'membership_plan_premium-2': '/qrcode_premium_6month.jpeg',
-    'membership_plan_premium-3': '/qrcode_premium_12month.jpeg',
+    'membership_plan_premium-3': '/qrcode_5rs.jpeg',
   };
 
   const [formData, setFormData] = useState({
@@ -42,6 +43,7 @@ const GymMembershipForm = () => {
   const [otpVerified, setOtpVerified] = useState(false);
   const [formHeight, setFormHeight] = useState('650px'); // Initial height
   const [qrCodeUrl, setQrCodeUrl] = useState(qrCodeUrls['membership_plan_basic-1']); // Initial QR code
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedState = localStorage.getItem('registrationState');
@@ -99,11 +101,22 @@ const GymMembershipForm = () => {
       [name]: type === 'checkbox' ? checked : value,
     });
 
-    // Update the QR code URL when membership type changes
-    if (name === 'membershipType') {
-      setQrCodeUrl(qrCodeUrls[value]);
+    // Update the QR code URL when the membership type changes
+  if (name === 'membershipType') {
+    const selectedMembership = memberships.find(membership => membership._id === value);
+
+    if (selectedMembership) {
+      // Remove any text in parentheses and trim whitespace
+      const cleanName = selectedMembership.name.replace(/\s*\(.*?\)\s*/g, '').trim();
+      
+      // Construct the key for QR code URL based on the cleaned name
+      const membershipKey = `${cleanName.replace(/ /g, '-')}-${selectedMembership.durationInMonths}`;
+      const qrCodeUrl = qrCodeUrls[cleanName];
+
+      setQrCodeUrl(qrCodeUrl || qrCodeUrls['membership_plan_basic-1']); // Default to a fallback QR code
     }
-  };
+  }
+};
 
   const validateName = (name) => /^[A-Za-z\s]+$/.test(name);
 
@@ -175,6 +188,7 @@ const GymMembershipForm = () => {
         setOtpVerified(true);
         localStorage.removeItem('registrationState');
         alert(data.message);
+        navigate('/login');
       } else {
         alert('Payment confirmation failed. Please try again.');
       }
@@ -189,6 +203,7 @@ const GymMembershipForm = () => {
   };
 
   return (
+    <div className="registration">
     <div className="form-container" style={{ height: formHeight }}>
       <h2>Gym Membership Registration</h2>
       <p>Fill out the form below to register for your gym membership.</p>
@@ -239,7 +254,7 @@ const GymMembershipForm = () => {
           required
         >
           {memberships.map((membership) => (
-            <option key={membership._id} value={membership.name}>
+            <option key={membership._id} value={membership._id}>
               {membership.name} ({membership.durationInMonths}-month)
             </option>
           ))}
@@ -277,6 +292,7 @@ const GymMembershipForm = () => {
     )}
 
     {otpVerified && <p className="confirmation-message">Payment confirmed and registration completed!</p>}
+    </div>
     </div>
   );
 };

@@ -86,7 +86,7 @@
   color: #fff;
 }
 
-.conditions input, .subjective-feedback input {
+.conditions select, .subjective-feedback select {
   width: 100%;
   padding: 10px;
   border-radius: 10px;
@@ -97,7 +97,7 @@
   transition: box-shadow 0.3s ease;
 }
 
-.conditions input:focus, .subjective-feedback input:focus {
+.conditions select:focus, .subjective-feedback select:focus {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 

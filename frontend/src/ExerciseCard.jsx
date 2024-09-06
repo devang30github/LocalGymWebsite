@@ -44,6 +44,7 @@ const ExerciseCard = ({ exercise, onAddToPlan, onRemove, isInPlan, onWeightChang
                 type="number" 
                 value={weight} 
                 onChange={handleWeightChange} 
+                min="0" // Ensure the value is not negative
               />
             </label>
             <label>
@@ -52,6 +53,7 @@ const ExerciseCard = ({ exercise, onAddToPlan, onRemove, isInPlan, onWeightChang
                 type="number" 
                 value={duration} 
                 onChange={handleDurationChange} 
+                min="0" // Ensure the value is not negative
               />
             </label>
           </div>

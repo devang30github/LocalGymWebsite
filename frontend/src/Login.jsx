@@ -37,6 +37,7 @@ const Login = () => {
   return (
     <>
     <NavBar/>
+    <div className="login-form-container">
     <div className="login-container">
       <form onSubmit={handleSubmit}>
         {error && <div className="error">{error}</div>}
@@ -62,6 +63,7 @@ const Login = () => {
         </div>
         <button type="submit" className="login-button">Login</button>
       </form>
+    </div>
     </div>
     <Footer/>
     </>

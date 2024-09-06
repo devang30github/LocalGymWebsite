@@ -8,19 +8,18 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-section">
-        <h3 className="footer-logo">Siddhivinayak Gym</h3>
+        <h3 className="footer-logo">GymPro Manager</h3>
         <p>Sambhaji Nagar, Ashokvan Dahisar(E)</p>
         <p>Phone: (123) 456-7890</p>
-        <p>Email: siddhivinayakgym@gmail.com</p>
+        <p>Email: gympromanager@gmail.com</p>
       </div>
       <div className="footer-section">
         <h3>Quick Links</h3>
         <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Classes</a></li>
-          <li><a href="#">Trainers</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="./home">Home</a></li>
+          <li><a href="./about-us">About</a></li>
+          <li><a href="./services">Services</a></li>
+          <li><a href="./contactus">Contact</a></li>
         </ul>
       </div>
       <div className="footer-section">
@@ -32,7 +31,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-section">
-        <p>&copy; 2024 Siddhivinayak  Gym. All rights reserved.</p>
+        <p>&copy; 2024 GymPro Manager . All rights reserved.</p>
         <div className="footer-legal">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>

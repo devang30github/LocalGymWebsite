@@ -78,7 +78,7 @@ const WorkoutPlans = () => {
   };
 
   const validateExercise = (exercise) => {
-    return exercise.name && exercise.bodyPart && exercise.equipment && exercise.difficulty && exercise.sets > 0 && exercise.reps > 0 && exercise.restPeriod;
+    return exercise.name && exercise.bodyPart && exercise.equipment && exercise.difficulty  && exercise.restPeriod;
   };
 
   const handleAddToTodaysWorkout = (exercise) => {
@@ -195,6 +195,7 @@ const WorkoutPlans = () => {
         newExercise={newExercise}
         setNewExercise={setNewExercise}
         onSubmit={handleAddExercise}
+        
       />
 
       <TodaysWorkout

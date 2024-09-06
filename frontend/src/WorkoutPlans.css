@@ -177,6 +177,14 @@
   border-radius: 4px;
 }
 
+.exercise-form select {
+  padding: 0.5rem;
+  background-color: #3a3a3a; /* Dark background for inputs */
+  color: #ccc; /* Light text color */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .exercise-form button {
   grid-column: span 2;
   padding: 0.75rem 1rem;

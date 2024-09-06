@@ -111,7 +111,9 @@ const authMiddleware = async (req, res, next) => {
 // Admin: Fetch pending registrations
 app.get('/admin/registrations', async (req, res) => {
   try {
-    const registrations = await User.find({ paymentConfirmed: false });
+    // Fetch registrations where payment is not confirmed and populate membershipType
+    const registrations = await User.find({ paymentConfirmed: false }).populate('membershipType');
+    
     res.json(registrations);
   } catch (error) {
     console.error('Error fetching registrations:', error);
@@ -356,40 +358,19 @@ app.post('/exercises/remove', authMiddleware, async (req, res) => {
     res.status(500).send(error);
   }
 });
-
-// Fetch user's workout history
-app.get('/workout/history', authMiddleware, async (req, res) => {
+// workout-history
+app.get('/history',authMiddleware, async (req, res) => {
   const userEmail = req.user.email;
-  
   try {
-    const workoutHistory = await WorkoutSession.find({ user: userEmail }).sort({ date: -1 });
+    // Assuming req.user.email contains the user's email
+    const workoutHistory = await WorkoutSession.find({ user: userEmail }) // Use email for user identification
+      .populate('exercises.exerciseId', 'name') // Populate exerciseId with the exercise name
+      .exec();
+
     res.json(workoutHistory);
-  } catch (error) {
-    console.error('Error fetching workout history:', error);
-    res.status(500).send('An error occurred while fetching workout history.');
-  }
-});
-
-// Fetch user stats
-app.get('/user/stats', authMiddleware, async (req, res) => {
-  const userEmail = req.user.email;
-  
-  try {
-    const workoutSessions = await WorkoutSession.find({ user: userEmail });
-    const totalWorkouts = workoutSessions.length;
-    const totalTime = workoutSessions.reduce((sum, session) => sum + session.duration, 0);
-    const avgDuration = totalWorkouts ? (totalTime / totalWorkouts) : 0;
-    
-    const userStats = {
-      totalWorkouts,
-      totalTime: (totalTime / 60).toFixed(2),  // Convert minutes to hours
-      avgDuration: avgDuration.toFixed(2)
-    };
-    
-    res.json(userStats);
-  } catch (error) {
-    console.error('Error fetching user stats:', error);
-    res.status(500).send('An error occurred while fetching user stats.');
+  } catch (err) {
+    console.error('Error fetching workout history:', err);
+    res.status(500).json({ message: 'Error fetching workout history' });
   }
 });
 

@@ -1,123 +1,140 @@
-/* GymMembershipForm.css */
-
-.form-container {
-  width: 100%; /* Full width of the container */
-  max-width: 650px; /* Maximum width to maintain form size */
-  margin: 55px auto;
-  padding: 25px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #1c1c1c; /* Dark background */
-  color: white; /* Text color */
-  box-sizing: border-box; /* Include padding and border in the width */
-  height: 100%; /* Full height of the container */
+.registration {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background-color: #1F1B24; /* Dark background for the main area */
 }
 
-.form-container h2,
+.form-container {
+  width: 100%;
+  max-width: 500px;
+  background-color: #272033; /* Dark card background */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: height 0.3s ease-in-out;
+  overflow: hidden;
+  color: #E0E0E0; /* Light gray text */
+}
+
+.form-container h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #E0E0E0;
+  text-align: center;
+}
+
 .form-container p {
-  margin-bottom: 15px;
-  text-align: center; /* Center-align the heading and paragraph */
+  margin-bottom: 20px;
+  color: #E0E0E0;
+  text-align: center;
+  font-size: 14px;
 }
 
 .form-container label {
   display: block;
-  margin: 15px 0 5px 0;
-  text-align: justify;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #E0E0E0;
 }
 
 .form-container input[type="text"],
 .form-container input[type="email"],
+.form-container input[type="password"],
 .form-container select,
 .form-container .otp-input {
-  width: 100%; /* Full width of the container */
+  width: calc(100% - 20px); /* Ensure full width minus padding */
   padding: 10px;
-  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  border: 1px solid #E0E0E0;
   border-radius: 5px;
-  box-sizing: border-box;
-  background-color: #333; /* Dark background */
-  color: white; /* Text color */
-  margin-bottom: 15px; /* Space between inputs */
+  background-color: #2A2A33; /* Slightly lighter dark for input fields */
+  color: #E0E0E0;
 }
 
-.form-container input[type="checkbox"] {
-  margin-right: 10px;
-  margin-top: 10px;
-}
-
-.form-container .btn {
-  width: 100%; /* Full width of the container */
-  padding: 10px;
-  background-color: #28a745;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 10px;
-  box-sizing: border-box; /* Include padding in the width */
-}
-
-.form-container .btn:hover {
-  background-color: #218838;
-}
-
-.form-container .btn:active {
-  background-color: #1e7e34;
-}
-
-.password-container {
+.form-container .password-container {
   display: flex;
   align-items: center;
-  background-color: #333; /* Dark background */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-bottom: 15px; /* Space between password field and other inputs */
 }
 
 .password-input {
-  flex: 1;
-  padding: 15px;
-  border: none;
-  border-radius: 5px 0 0 5px;
-  box-sizing: border-box;
-  background-color: transparent;
-  color: white; /* Password input text color */
+  flex-grow: 1;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .password-icon {
-  padding: 15px;
-  border-radius: 0 5px 5px 0;
-  background-color: #28a745;
-  color: cyan;
+  position: absolute;
+  right: 10px;
+  background-color: white; /* Make the eye icon white */
+  opacity: 0.8; /* Slight transparency */
+}
+
+.password-icon:hover {
+  color: #E0E0E0; /* Change color on hover */
+  opacity: 1; /* Remove transparency on hover */
+}
+
+.form-container .btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #00BFA6; /* Button background */
+  color: #000000; /* Button text */
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-container .btn:hover {
+  background-color: #009E8E; /* Slightly darker teal on hover */
+}
+
+.form-container .retry-button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #272033; /* Match the card background */
+  color: #00BFA6; /* Button text teal */
+  border: 1px solid #00BFA6;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.form-container .retry-button:hover {
+  background-color: #00BFA6; /* Teal on hover */
+  color: #000000; /* Black text on hover */
+}
+
+.form-container .error {
+  color: #E74C3C; /* Red for error messages */
+  margin-bottom: 10px;
 }
 
 .payment-section {
-  margin-top: 20px; /* Adjusted margin to fit better */
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #2b2b2b; /* Dark background */
-  text-align: center; /* Center-align text */
+  text-align: center;
+  margin-top: 20px;
 }
 
 .payment-section h3 {
   margin-bottom: 10px;
-  color: #28a745; /* Green color for heading */
+  font-size: 18px;
+  color: #FF4500; /* Accent color */
 }
 
 .qr-code {
-  width: 100%; /* Full width of the payment section */
-  max-width: 300px; /* Maximum width for the QR code */
-  height: auto; /* Maintain aspect ratio */
-  margin-bottom: 10px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
+  width: 300px;
+  height: 350px;
+  margin: 10px 0;
+  border: 2px solid #FF4500; /* Border matching the accent color */
+  border-radius: 8px;
 }
 
 .confirmation-message {
-  color: #28a745; /* Green color for confirmation message */
-  font-size: 18px;
+  color: #1AB394; /* Light green for success */
+  margin-top: 15px;
   text-align: center;
 }

@@ -36,13 +36,13 @@
     "features": ["Access to gym","Customized training plans","Dietary guidance"]
   },
   {
-    "name":"Personal-Training-Advanced-3",
+    "name":"Personal-Training-Advanced-1",
     "durationInMonths":1,
     "price":2000,
     "features": ["Access to all gym facilities","Advanced techniques plans","Nutrition support guidance"]
   },
   {
-    "name":"Personal-Training-Advanced-3",
+    "name":"Personal-Training-Advanced-2",
     "durationInMonths":6,
     "price":10500,
     "features":["Access to all gym facilities","Advanced techniques plans","Nutrition support guidance"]
