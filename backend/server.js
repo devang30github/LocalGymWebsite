@@ -344,7 +344,7 @@ app.post('/workout/save', authMiddleware,async (req, res) => {
   }
 });
 
-// Remove exercise from user's list
+/* Remove exercise from user's list
 app.post('/exercises/remove', authMiddleware, async (req, res) => {
   const userEmail = req.user.email;
   const { exerciseId } = req.body;
@@ -358,6 +358,7 @@ app.post('/exercises/remove', authMiddleware, async (req, res) => {
     res.status(500).send(error);
   }
 });
+*/
 // workout-history
 app.get('/history',authMiddleware, async (req, res) => {
   const userEmail = req.user.email;

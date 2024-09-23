@@ -81,8 +81,16 @@ const WorkoutPlans = () => {
     return exercise.name && exercise.bodyPart && exercise.equipment && exercise.difficulty  && exercise.restPeriod;
   };
 
+  
   const handleAddToTodaysWorkout = (exercise) => {
-    setTodaysWorkout([...todaysWorkout, { ...exercise, weight: 0, duration: 0 }]);
+    // Check if the exercise is already in todaysWorkout
+    const isExerciseInPlan = todaysWorkout.some((ex) => ex._id === exercise._id);
+  
+    if (!isExerciseInPlan) {
+      setTodaysWorkout([...todaysWorkout, { ...exercise, weight: 0, duration: 0 }]);
+    } else {
+      alert("This exercise is already in your workout plan.");
+    }
   };
 
   const handleSaveWorkout = async (workoutData) => {
