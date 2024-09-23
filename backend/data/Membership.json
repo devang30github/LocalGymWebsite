@@ -52,5 +52,59 @@
     "durationInMonths":12,
     "price":20000,
     "features":["Access to all gym facilities","Advanced techniques plans","Nutrition support guidance"]
+  },
+  {
+    "name":"membership_plan_basic-1",
+    "durationInMonths":1,
+    "price":800,
+    "features":["Access to basic gym facilities"]
+  },
+  {
+    "name":"membership_plan_basic-2",
+    "durationInMonths":6,
+    "price":3600,
+    "features":["Access to basic gym facilities"]
+  },
+  {
+    "name":"membership_plan_basic-3",
+    "durationInMonths":12,
+    "price":6000,
+    "features":["Access to basic gym facilities"]
+  },
+  {
+    "name":"membership_plan_standard-1",
+    "durationInMonths":1,
+    "price":1000,
+    "features":["Access to cardio equipment and weight room"]
+  },
+  {
+    "name":"membership_plan_standard-2",
+    "durationInMonths":6,
+    "price":4800,
+    "features":["Access to cardio equipment and weight room"]
+  },
+  {
+    "name":"membership_plan_standard-3",
+    "durationInMonths":12,
+    "price":7200,
+    "features":["Access to cardio equipment and weight room"]
+  },
+  {
+    "name":"membership_plan_premium-1",
+    "durationInMonths":1,
+    "price":1200,
+    "features":["Access to all gym facilities, including the steam room and spa."]
+  },
+  {
+    "name":"membership_plan_premium-2",
+    "durationInMonths":6,
+    "price":5400,
+    "features":["Access to all gym facilities, including the steam room and spa."]
+  },
+  {
+    "name":"membership_plan_premium-3",
+    "durationInMonths":12,
+    "price":9600,
+    "features":["Access to all gym facilities, including the steam room and spa."]
   }
 ]

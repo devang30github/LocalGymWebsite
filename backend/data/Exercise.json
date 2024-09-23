@@ -7,7 +7,7 @@
   "sets": 3,
   "reps": 8,
   "restPeriod": "90 seconds",
-  "videoUrl": "https://www.example.com/bench-press",
+  "videoUrl": "https://www.youtube.com/watch?v=rT7DgCr-3pg",
   "createdBy":null
 },
 {
@@ -29,7 +29,7 @@
   "sets": 3,
   "reps": 12,
   "restPeriod": "60 seconds",
-  "videoUrl": "https://www.example.com/cable-fly",
+  "videoUrl": "https://www.youtube.com/watch?v=IP4oeKh1Sd4",
   "createdBy":null
 },
 {
@@ -51,7 +51,7 @@
   "sets": 3,
   "reps": 12,
   "restPeriod": "60 seconds",
-  "videoUrl": "https://www.example.com/dumbbell-fly",
+  "videoUrl": "https://www.youtube.com/watch?v=LfyQBUKR8SE",
   "createdBy":null
 },
 {
@@ -62,7 +62,7 @@
   "sets": 3,
   "reps": 15,
   "restPeriod": "45 seconds",
-  "videoUrl": "https://www.example.com/cable-crossover",
+  "videoUrl": "https://www.youtube.com/watch?v=8Um35Es-ROE",
   "createdBy":null
 },
 {
@@ -73,7 +73,7 @@
   "sets": 3,
   "reps": 12,
   "restPeriod": "60 seconds",
-  "videoUrl": "https://www.example.com/chest-press-machine",
+  "videoUrl": "https://www.youtube.com/shorts/A12UEw70jio",
   "createdBy":null
 },
 {
@@ -84,7 +84,7 @@
   "sets": 3,
   "reps": 6,
   "restPeriod": "120 seconds",
-  "videoUrl": "https://www.example.com/deadlift",
+  "videoUrl": "https://www.youtube.com/watch?v=AweC3UaM14o",
   "createdBy":null
 },
 {
@@ -95,7 +95,7 @@
   "sets": 3,
   "reps": 10,
   "restPeriod": "60 seconds",
-  "videoUrl": "https://www.example.com/bent-over-row",
+  "videoUrl": "https://www.youtube.com/watch?v=FWJR5Ve8bnQ",
   "createdBy":null
 },
 {
@@ -106,7 +106,7 @@
   "sets": 3,
   "reps": 12,
   "restPeriod": "60 seconds",
-  "videoUrl": "https://www.example.com/single-arm-dumbbell-row",
+  "videoUrl": "https://www.youtube.com/watch?v=dFzUjzfih7k",
   "createdBy":null
 },
 {
@@ -117,7 +117,7 @@
   "sets": 3,
   "reps": 10,
   "restPeriod": "60 seconds",
-  "videoUrl": "https://www.example.com/lat-pulldown",
+  "videoUrl": "https://www.youtube.com/watch?v=JGeRYIZdojU",
   "createdBy":null
 },
 {
@@ -128,7 +128,7 @@
   "sets": 3,
   "reps": 12,
   "restPeriod": "60 seconds",
-  "videoUrl": "https://www.example.com/seated-cable-row",
+  "videoUrl": "https://www.youtube.com/watch?v=lJoozxC0Rns",
   "createdBy":null
 },
 {
@@ -139,7 +139,7 @@
   "sets": 3,
   "reps": 8,
   "restPeriod": "90 seconds",
-  "videoUrl": "https://www.example.com/pull-up",
+  "videoUrl": "https://www.youtube.com/watch?v=dAScZVF5o9k",
   "createdBy":null
 },
 {
@@ -150,7 +150,7 @@
   "sets": 3,
   "reps": 8,
   "restPeriod": "90 seconds",
-  "videoUrl": "https://www.example.com/t-bar-row",
+  "videoUrl": "https://www.youtube.com/watch?v=hYo72r8Ivso",
   "createdBy":null
 },
 {

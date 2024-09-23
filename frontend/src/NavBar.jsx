@@ -58,7 +58,9 @@ const NavBar = () => {
       <div className="navbar-right">
         {isAuthenticated ? (
           <div className="menu">
-            <button className="menu-button">R</button>
+            <button className="menu-button">
+            <img src="icons8-dropdown-50.png" alt="Logo" className="navbar-logo" />
+            </button>
             <div className="dropdown">
               <button onClick={handleDashboard}>Dashboard</button>
               <button>Profile</button>

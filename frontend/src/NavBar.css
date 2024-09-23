@@ -76,10 +76,10 @@
   background: linear-gradient(135deg,#FFE53B, #FF2525);;
   color: #fff;
   border: none;
-  padding: 8px 12px;
-  font-size: 18px;
+  padding: 2px;
+  font-size: 20px;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 24px;
   transition: background-color 0.3s ease;
 }
 .login-button {
