@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './Home';
@@ -11,6 +10,9 @@ import AdminDashboard from './AdminDashboard';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import Dashboard from './Dashboard';
+import AdminLogin from './AdminLogin';
+import AdminRoute from './AdminRoute';
+
 
 const App = () => {
   return (
@@ -24,7 +26,8 @@ const App = () => {
       <Route path="/Contact-us" element={<ContactUs/>} />
       <Route path="/registration" element={<RegisterForm/>} />
       <Route path="/Workout-generator" element={<ProtectedRoute component={WorkoutGenerator} />} />
-      <Route path='/admin' element={<AdminDashboard/>}/>
+      <Route path="/Admin-Dashboard" element={<AdminRoute component={AdminDashboard} />} />
+      <Route path='/adminlogin' element={<AdminLogin/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
 
       </Routes>

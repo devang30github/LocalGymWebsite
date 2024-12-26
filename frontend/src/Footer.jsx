@@ -20,6 +20,7 @@ const Footer = () => {
           <li><a href="./about-us">About</a></li>
           <li><a href="./services">Services</a></li>
           <li><a href="./contactus">Contact</a></li>
+          <li><a href='./Admin-Dashboard'>Admin</a></li>
         </ul>
       </div>
       <div className="footer-section">

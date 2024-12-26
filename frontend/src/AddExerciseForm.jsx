@@ -58,8 +58,10 @@ const AddExerciseForm = ({ newExercise, setNewExercise, onSubmit }) => {
       isValid = false;
     }
 
-    if (
-      newExercise.videoUrl &&
+    if (!newExercise.videoUrl.trim()) {
+      newErrors.videoUrl = 'Video URL is required.';
+      isValid = false;
+    } else if (
       !/^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}$/i.test(newExercise.videoUrl)
     ) {
       newErrors.videoUrl = 'Video URL must be a valid YouTube URL.';

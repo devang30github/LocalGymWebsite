@@ -13,6 +13,7 @@ const Membership = require('./models/Membership');
 const Exercise = require('./models/Exercise');
 const WorkoutSession= require('./models/WorkoutSession');
 const ContactMessage=require('./models/ContactMessage');
+const Admin=require('./models/Admin');
 require('dotenv').config();
 
 const app = express();
@@ -78,11 +79,27 @@ const seedMemberships = async () => {
     console.error('Error seeding membership data:', error);
   }
 };
+// Seed Admin Account
+async function seedAdminAccount() {
+  const email = 'gamingzone3045@gmail.com';
+  const password = 'admin123';
+
+  const existingAdmin = await Admin.findOne({ email });
+  if (!existingAdmin) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const admin = new Admin({ email, password: hashedPassword });
+      await admin.save();
+      console.log('Admin account created:', email);
+  } else {
+    console.log('Admin account already exists:', email);
+}
+}
 
 
 // Run the seeding process
 seedExercises();
 seedMemberships();
+seedAdminAccount();
 
 // Authentication Middleware
 const authMiddleware = async (req, res, next) => {
@@ -107,53 +124,64 @@ const authMiddleware = async (req, res, next) => {
     res.status(401).send('Invalid token');
   }
 };
+/*
+const authMiddleware = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-// Admin: Fetch pending registrations
-app.get('/admin/registrations', async (req, res) => {
-  try {
-    // Fetch registrations where payment is not confirmed and populate membershipType
-    const registrations = await User.find({ paymentConfirmed: false }).populate('membershipType');
-    
-    res.json(registrations);
-  } catch (error) {
-    console.error('Error fetching registrations:', error);
-    res.status(500).send('An error occurred while fetching registrations.');
+  if (!authHeader) {
+    return res.status(401).send('Authorization header missing');
   }
-});
 
-// Admin: Send OTP
-app.post('/admin/send-otp', async (req, res) => {
-  const { userId } = req.body;
+  const token = authHeader.replace('Bearer ', '');
+
   try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).send('User not found.');
+    const decoded = jwt.verify(token, jwtSecret);
+
+    // Fetch the user/admin based on the role in the decoded token
+    const user = await User.findById(decoded.id);
+    const admin = await Admin.findById(decoded.id);
+
+    if (!user && !admin) {
+      return res.status(401).send('User or Admin not found');
     }
-    const otp = generateOTP();
-    user.otp = otp;
-    user.otpExpiry = Date.now() + 24 * 60 * 60 * 1000; // OTP valid for 24 hours
-    await user.save();
 
-    const mailOptions = {
-      from: mailUser,
-      to: user.email,
-      subject: 'Your OTP for Gym Membership Payment Confirmation',
-      text: `Your OTP is ${otp}. It is valid for 24 hours.`,
-    };
+    // Attach role and email to the request object
+    if (user) {
+      req.user = { email: user.email, role: 'user' };
+    } else if (admin) {
+      req.user = { email: admin.email, role: 'admin' };
+    }
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending email:', error);
-        return res.status(500).send('Error sending OTP.');
-      }
-      res.json({ message: 'OTP sent to user\'s email.' });
-    });
+    next();
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).send('An error occurred while sending OTP.');
+    console.error('Error in authMiddleware:', error.message); // Log the exact error message
+    res.status(401).send('Invalid token');
   }
-});
+};
 
+*/
+const AdminauthMiddleware = async (req, res, next) => {
+  const AdminauthHeader = req.headers.authorization;
+
+  if (!AdminauthHeader) {
+    return res.status(401).send('Authorization header missing');
+  }
+
+  const AdminToken = AdminauthHeader.replace('Bearer ', '');
+
+  try {
+    const decoded = jwt.verify(AdminToken, jwtSecret);
+    const admin = await Admin.findById(decoded.id);
+    if (!admin) {
+      return res.status(401).send('User not found');
+    }
+    req.user = { email: admin.email };
+    next();
+  } catch (error) {
+    console.error('Error in authMiddleware:', error.message);  // Log the exact error message
+    res.status(401).send('Invalid token');
+  }
+};
 // Register user
 app.post('/register', async (req, res) => {
   const { name, email, password, membershipType, termsAgreed } = req.body;
@@ -231,6 +259,45 @@ app.post('/login', async (req, res) => {
     res.status(500).send(error);
   }
 });
+/*
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).send('Invalid email or password.');
+
+    // Verify password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).send('Invalid email or password.');
+
+    // Check payment confirmation
+    if (!user.paymentConfirmed) return res.status(403).send('Payment not confirmed.');
+
+    // Check membership expiry
+    if (new Date() > user.membershipExpiryDate) return res.status(403).send('Membership expired.');
+
+    
+
+    // Generate JWT with user info and role
+    const usertoken = jwt.sign(
+      { id: user._id, role: 'user', email: user.email },
+      jwtSecret,
+      { expiresIn: '2h' }
+    );
+
+    // Respond with token and user role
+    res.json({ token:usertoken });
+
+  } catch (error) {
+    console.error('Login error:', error.message);
+    res.status(500).send('An unexpected error occurred. Please try again later.');
+  }
+});
+*/
+
+
 // Fetch exercises for the user
 app.get('/exercises', authMiddleware, async (req, res) => {
   const userEmail = req.user.email; // Extracted from the JWT token
@@ -344,21 +411,6 @@ app.post('/workout/save', authMiddleware,async (req, res) => {
   }
 });
 
-/* Remove exercise from user's list
-app.post('/exercises/remove', authMiddleware, async (req, res) => {
-  const userEmail = req.user.email;
-  const { exerciseId } = req.body;
-  try {
-    const user = await User.findById(userEmail);
-    if (!user) return res.status(404).send('User not found.');
-    user.exercises = user.exercises.filter(id => !id.equals(exerciseId));
-    await user.save();
-    res.json({ message: 'Exercise removed from user\'s list.' });
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-*/
 // workout-history
 app.get('/history',authMiddleware, async (req, res) => {
   const userEmail = req.user.email;
@@ -396,6 +448,112 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
+// Admin Login Route
+/*
+app.post('/admin/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(400).send('Admin not found.');
+    }
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) {
+      return res.status(400).send('Invalid credentials.');
+    }
+    const adminToken = jwt.sign({ id: admin._id }, jwtSecret, { expiresIn: '2h' });
+    res.json({ adminToken });
+  } catch (error) {
+    res.status(500).send('Error in admin login');
+  }
+});
+*/
+app.post('/admin/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Check if admin exists
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(400).send('Invalid email or password.');
+    }
+    // Verify password
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) {
+      return res.status(400).send('Invalid email or password.');
+    }
+    // Generate JWT with admin details
+    const AdminToken = jwt.sign({ id: admin._id, email: admin.email },jwtSecret,{ expiresIn: '2h' });
+    // Respond with the token
+    res.json({ token: AdminToken });
+  } catch (error) {
+    console.error('Error in admin login:', error.message);
+    res.status(500).send('An unexpected error occurred. Please try again later.');
+  }
+});
+
+
+// Admin: Fetch pending registrations
+app.get('/admin/registrations',async (req, res) => {
+  try {
+    // Fetch registrations where payment is not confirmed and populate membershipType
+    const registrations = await User.find({ paymentConfirmed: false }).populate('membershipType');
+    
+    res.json(registrations);
+  } catch (error) {
+    console.error('Error fetching registrations:', error);
+    res.status(500).send('An error occurred while fetching registrations.');
+  }
+});
+
+// Admin: Send OTP
+app.post('/admin/send-otp',async (req, res) => {
+  const { userId } = req.body;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send('User not found.');
+    }
+    const otp = generateOTP();
+    user.otp = otp;
+    user.otpExpiry = Date.now() + 24 * 60 * 60 * 1000; // OTP valid for 24 hours
+    await user.save();
+
+    const mailOptions = {
+      from: mailUser,
+      to: user.email,
+      subject: 'Your OTP for Gym Membership Payment Confirmation',
+      text: `Your OTP is ${otp}. It is valid for 24 hours.`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+        return res.status(500).send('Error sending OTP.');
+      }
+      res.json({ message: 'OTP sent to user\'s email.' });
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('An error occurred while sending OTP.');
+  }
+});
+
+
+// Admin: Delete registration request
+app.delete('/admin/delete-request/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) {
+      return res.status(404).send('User not found.');
+    }
+    res.json({ message: 'Registration request deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting registration request:', error);
+    res.status(500).send('An error occurred while deleting the registration request.');
+  }
+});
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
