@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext  } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import NavBar from './NavBar';
 import Footer from './Footer';
 import { AdminAuthContext } from './AdminAuthContext';
@@ -8,13 +8,16 @@ const AdminDashboard = () => {
   const { isAdminAuthenticated, AdminLogout } = useContext(AdminAuthContext);
   const navigate = useNavigate();
   const [registrations, setRegistrations] = useState([]);
+  const [upcomingRenewals, setUpcomingRenewals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [sendingOtp, setSendingOtp] = useState(null); // To track which OTP is being sent
-  const [deletingRequest, setDeletingRequest] = useState(null); // To track which request is being deleted
+  const [sendingOtp, setSendingOtp] = useState(null);
+  const [deletingRequest, setDeletingRequest] = useState(null);
+  const [sendingNotification, setSendingNotification] = useState(null); // To track which notification is being sent
 
   useEffect(() => {
     fetchRegistrations();
+    fetchUpcomingRenewals();
   }, []);
 
   const handleLogout = () => {
@@ -26,8 +29,8 @@ const AdminDashboard = () => {
     try {
       const response = await fetch('http://localhost:3001/admin/registrations', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('AdminToken')}` // Ensure the token is sent with the request
-        }
+          'Authorization': `Bearer ${localStorage.getItem('AdminToken')}`,
+        },
       });
       if (!response.ok) throw new Error('Failed to fetch registrations');
       const data = await response.json();
@@ -38,6 +41,22 @@ const AdminDashboard = () => {
       setLoading(false);
     }
   };
+
+  const fetchUpcomingRenewals = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/upcoming-renewals', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('AdminToken')}`,
+        },
+      });
+      if (!response.ok) throw new Error('Failed to fetch upcoming renewals');
+      const data = await response.json();
+      setUpcomingRenewals(data);
+    } catch (error) {
+      setError('Error fetching upcoming renewals: ' + error.message);
+    }
+  };
+
 
   const handleSendOtp = async (userId) => {
     try {
@@ -66,6 +85,33 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleSendRenewalNotification = async (userId) => {
+    try {
+      setSendingNotification(userId);
+      const response = await fetch('http://localhost:3001/admin/send-renewal-notification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('AdminToken')}`,
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+        fetchUpcomingRenewals(); // Refresh the renewals list
+      } else {
+        alert('Error sending notification: ' + data.message);
+      }
+    } catch (error) {
+      console.error('Error sending notification:', error);
+      alert('Error sending notification');
+    } finally {
+      setSendingNotification(null);
+    }
+  };
+  
   const handleDeleteRequest = async (userId) => {
     try {
       setDeletingRequest(userId); // Track which request is being deleted to show a loading state
@@ -97,10 +143,10 @@ const AdminDashboard = () => {
 
   return (
     <>
-    <NavBar/>
-    <div>
-      <h1>Admin Dashboard</h1>
-      <button
+      <NavBar />
+      <div>
+        <h1>Admin Dashboard</h1>
+        <button
           onClick={handleLogout}
           style={{
             backgroundColor: '#3498DB',
@@ -109,11 +155,12 @@ const AdminDashboard = () => {
             padding: '10px 15px',
             cursor: 'pointer',
             borderRadius: '5px',
-            marginBottom: '20px'
+            marginBottom: '20px',
           }}
         >
           Logout
         </button>
+
       <h2>Pending Registrations</h2>
       {error && <div style={{ color: 'red' }}>{error}</div>} {/* Display error message if any */}
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -166,8 +213,45 @@ const AdminDashboard = () => {
           ))}
         </tbody>
       </table>
-    </div>
-    <Footer/>
+
+        <h2>Upcoming Renewals</h2>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Membership Expiry Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {upcomingRenewals.map((user) => (
+              <tr key={user._id}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{new Date(user.membershipExpiryDate).toDateString()}</td>
+                <td>
+                  <button
+                    onClick={() => handleSendRenewalNotification(user._id)}
+                    disabled={sendingNotification === user._id}
+                    style={{
+                      backgroundColor: sendingNotification === user._id ? '#ddd' : '#00BFA6',
+                      color: '#fff',
+                      border: 'none',
+                      padding: '5px 10px',
+                      cursor: sendingNotification === user._id ? 'not-allowed' : 'pointer',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    {sendingNotification === user._id ? 'Sending...' : 'Send Notification'}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <Footer />
     </>
   );
 };

@@ -555,5 +555,66 @@ app.delete('/admin/delete-request/:userId', async (req, res) => {
   }
 });
 
+app.get('/upcoming-renewals', async (req, res) => {
+  try {
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+    const users = await User.find({
+      membershipExpiryDate: { $gte: startOfMonth, $lte: endOfMonth }
+    }).select('name email membershipExpiryDate');
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error('Error fetching upcoming renewals:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.post('/admin/send-renewal-notification', async (req, res) => {
+  const { userId } = req.body;
+
+  try {
+    // Fetch the user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send('User not found.');
+    }
+
+    // Check if the membership is expiring within the next 7 days
+    const today = new Date();
+    const expiryDate = new Date(user.membershipExpiryDate);
+    const daysUntilExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+
+    if (daysUntilExpiry > 7) {
+      return res.status(400).send('Membership is not expiring within the next 7 days.');
+    }
+
+    // Email content for renewal notification
+    const mailOptions = {
+      from: mailUser,
+      to: user.email,
+      subject: 'Membership Renewal Reminder',
+      text: `Dear ${user.name},\n\nYour gym membership is set to expire on ${expiryDate.toDateString()}. 
+We value your commitment to fitness and encourage you to renew your membership to continue enjoying our facilities and services.\n\n
+Please visit our website or contact us to renew your membership before it expires.\n\n
+Thank you for being part of our community!\n\nBest regards,\n[Your Gym Name]`,
+    };
+
+    // Send the email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+        return res.status(500).send('Error sending renewal notification.');
+      }
+      res.json({ message: 'Membership renewal notification sent to user\'s email.' });
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('An error occurred while sending renewal notification.');
+  }
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
