@@ -1,23 +1,26 @@
 import React, { useState, useEffect, useContext } from 'react';
-import NavBar from './NavBar';
-import Footer from './Footer';
 import { AdminAuthContext } from './AdminAuthContext';
 import { useNavigate } from 'react-router-dom';
+import './AdminDashboard.css';
+import ContactMessages from './ContactMessages';
+
 
 const AdminDashboard = () => {
   const { isAdminAuthenticated, AdminLogout } = useContext(AdminAuthContext);
   const navigate = useNavigate();
   const [registrations, setRegistrations] = useState([]);
-  const [upcomingRenewals, setUpcomingRenewals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sendingOtp, setSendingOtp] = useState(null);
   const [deletingRequest, setDeletingRequest] = useState(null);
+  const [dashboardData, setDashboardData] = useState({});
+  const [activeUsers, setActiveUsers] = useState([]);
   const [sendingNotification, setSendingNotification] = useState(null); // To track which notification is being sent
 
   useEffect(() => {
     fetchRegistrations();
-    fetchUpcomingRenewals();
+    fetchActiveUsers();
+    fetchDashboardData();
   }, []);
 
   const handleLogout = () => {
@@ -42,18 +45,37 @@ const AdminDashboard = () => {
     }
   };
 
-  const fetchUpcomingRenewals = async () => {
+  const fetchActiveUsers = async () => {
     try {
-      const response = await fetch('http://localhost:3001/upcoming-renewals', {
+      const response = await fetch('http://localhost:3001/admin/active-users', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('AdminToken')}`,
         },
       });
-      if (!response.ok) throw new Error('Failed to fetch upcoming renewals');
+      if (!response.ok) throw new Error('Failed to fetch active users');
       const data = await response.json();
-      setUpcomingRenewals(data);
+      setActiveUsers(data);
     } catch (error) {
-      setError('Error fetching upcoming renewals: ' + error.message);
+      setError('Error fetching active users: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchDashboardData = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/admin/dashboard-summary', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('AdminToken')}`,
+        },
+      });
+      if (!response.ok) throw new Error('Failed to fetch dashboard summary');
+      const data = await response.json();
+      setDashboardData(data);
+    } catch (error) {
+      setError('Error fetching dashboard data: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -143,23 +165,30 @@ const AdminDashboard = () => {
 
   return (
     <>
-      <NavBar />
+      
       <div>
         <h1>Admin Dashboard</h1>
         <button
           onClick={handleLogout}
-          style={{
-            backgroundColor: '#3498DB',
-            color: '#fff',
-            border: 'none',
-            padding: '10px 15px',
-            cursor: 'pointer',
-            borderRadius: '5px',
-            marginBottom: '20px',
-          }}
         >
           Logout
         </button>
+
+      {/* Dashboard Cards */}
+      <div className="dashboard-cards">
+          <div className="card">
+            <h3>Total Users</h3>
+            <p>{dashboardData.totalUsers || 0}</p>
+          </div>
+          <div className="card">
+            <h3>Current Month Revenue</h3>
+            <p>₹{dashboardData.monthlyRevenue || 0}</p>
+          </div>
+          <div className="card">
+            <h3>New Registrations</h3>
+            <p>{dashboardData.newRegistrations || 0}</p>
+          </div>
+      </div>
 
       <h2>Pending Registrations</h2>
       {error && <div style={{ color: 'red' }}>{error}</div>} {/* Display error message if any */}
@@ -182,29 +211,13 @@ const AdminDashboard = () => {
                 <button
                   onClick={() => handleSendOtp(registration._id)}
                   disabled={sendingOtp === registration._id} // Disable button while OTP is being sent
-                  style={{
-                    backgroundColor: sendingOtp === registration._id ? '#ddd' : '#00BFA6',
-                    color: '#fff',
-                    border: 'none',
-                    padding: '5px 10px',
-                    cursor: sendingOtp === registration._id ? 'not-allowed' : 'pointer',
-                    borderRadius: '4px',
-                    marginRight: '10px'
-                  }}
                 >
                   {sendingOtp === registration._id ? 'Sending...' : 'Send OTP'}
                 </button>
                 <button
                   onClick={() => handleDeleteRequest(registration._id)}
                   disabled={deletingRequest === registration._id} // Disable button while request is being deleted
-                  style={{
-                    backgroundColor: deletingRequest === registration._id ? '#ddd' : '#E74C3C',
-                    color: '#fff',
-                    border: 'none',
-                    padding: '5px 10px',
-                    cursor: deletingRequest === registration._id ? 'not-allowed' : 'pointer',
-                    borderRadius: '4px'
-                  }}
+                  
                 >
                   {deletingRequest === registration._id ? 'Deleting...' : 'Delete Request'}
                 </button>
@@ -214,44 +227,40 @@ const AdminDashboard = () => {
         </tbody>
       </table>
 
-        <h2>Upcoming Renewals</h2>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Membership Expiry Date</th>
-              <th>Actions</th>
+      <h2>Active Users</h2>
+      {error && <div style={{ color: 'red' }}>{error}</div>} {/* Display error message if any */}
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Membership Type</th>
+            <th>Membership Expiry Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {activeUsers.map((user) => (
+            <tr key={user._id}>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <td>{user.membershipType ? user.membershipType.name : 'N/A'}</td>
+              <td>{new Date(user.membershipExpiryDate).toDateString()}</td>
+              <td>
+                <button
+                  onClick={() => handleSendRenewalNotification(user._id)}
+                  disabled={sendingNotification === user._id}
+                
+                >
+                  {sendingNotification === user._id ? 'Sending...' : 'Send Notification'}
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {upcomingRenewals.map((user) => (
-              <tr key={user._id}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{new Date(user.membershipExpiryDate).toDateString()}</td>
-                <td>
-                  <button
-                    onClick={() => handleSendRenewalNotification(user._id)}
-                    disabled={sendingNotification === user._id}
-                    style={{
-                      backgroundColor: sendingNotification === user._id ? '#ddd' : '#00BFA6',
-                      color: '#fff',
-                      border: 'none',
-                      padding: '5px 10px',
-                      cursor: sendingNotification === user._id ? 'not-allowed' : 'pointer',
-                      borderRadius: '4px',
-                    }}
-                  >
-                    {sendingNotification === user._id ? 'Sending...' : 'Send Notification'}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          ))}
+        </tbody>
+      </table>
+      <ContactMessages />
       </div>
-      <Footer />
     </>
   );
 };

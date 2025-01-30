@@ -555,22 +555,6 @@ app.delete('/admin/delete-request/:userId', async (req, res) => {
   }
 });
 
-app.get('/upcoming-renewals', async (req, res) => {
-  try {
-    const currentDate = new Date();
-    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-
-    const users = await User.find({
-      membershipExpiryDate: { $gte: startOfMonth, $lte: endOfMonth }
-    }).select('name email membershipExpiryDate');
-
-    res.status(200).json(users);
-  } catch (error) {
-    console.error('Error fetching upcoming renewals:', error);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
 
 app.post('/admin/send-renewal-notification', async (req, res) => {
   const { userId } = req.body;
@@ -599,7 +583,7 @@ app.post('/admin/send-renewal-notification', async (req, res) => {
       text: `Dear ${user.name},\n\nYour gym membership is set to expire on ${expiryDate.toDateString()}. 
 We value your commitment to fitness and encourage you to renew your membership to continue enjoying our facilities and services.\n\n
 Please visit our website or contact us to renew your membership before it expires.\n\n
-Thank you for being part of our community!\n\nBest regards,\n[Your Gym Name]`,
+Thank you for being part of our community!\n\nBest regards,\GymPro Manager`,
     };
 
     // Send the email
@@ -613,6 +597,78 @@ Thank you for being part of our community!\n\nBest regards,\n[Your Gym Name]`,
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('An error occurred while sending renewal notification.');
+  }
+});
+
+app.get('/admin/active-users',async (req, res) => {
+  try {
+    // Fetch registrations where payment is not confirmed and populate membershipType
+    const activeUsers = await User.find({ paymentConfirmed: true }).populate('membershipType');
+    
+    res.json(activeUsers);
+  } catch (error) {
+    console.error('Error fetching registrations:', error);
+    res.status(500).send('An error occurred while fetching registrations.');
+  }
+});
+
+app.get('/admin/dashboard-summary', async (req, res) => {
+  try {
+    // Get the start and end of the current month
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1);
+
+    // Total users count
+    const totalUsers = await User.countDocuments();
+
+    // Fetch users who purchased memberships this month
+    const usersWithMembershipsThisMonth = await User.find({
+      membershipStartDate: { $gte: startOfMonth, $lt: endOfMonth },
+    }).populate('membershipType'); // Ensure 'membershipType' is populated
+
+    // Calculate total monthly revenue by summing up the price of each user's membership
+    const monthlyRevenue = usersWithMembershipsThisMonth.reduce((total, user) => {
+      return total + (user.membershipType?.price || 0);
+    }, 0);
+
+    // New registrations in the last 30 days
+    const last30Days = new Date(new Date().setDate(new Date().getDate() - 30));
+    const newRegistrations = await User.countDocuments({
+      membershipStartDate: { $gte: last30Days },
+    });
+
+    res.json({
+      totalUsers,
+      monthlyRevenue,
+      newRegistrations,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// Get paginated contact messages
+app.get('/admin/contact-messages', async (req, res) => {
+  const { page = 1, limit = 10 } = req.query; // Default to page 1 and 10 messages per page
+
+  try {
+    const messages = await ContactMessage.find()
+      .sort({ createdAt: -1 }) // Sort by most recent first
+      .skip((page - 1) * limit) // Skip documents for pagination
+      .limit(parseInt(limit)); // Limit the number of documents
+
+    const totalMessages = await ContactMessage.countDocuments();
+
+    res.json({
+      messages,
+      totalMessages,
+      totalPages: Math.ceil(totalMessages / limit),
+      currentPage: parseInt(page),
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch messages' });
   }
 });
 
