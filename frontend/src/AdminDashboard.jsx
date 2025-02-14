@@ -13,14 +13,18 @@ const AdminDashboard = () => {
   const [error, setError] = useState(null);
   const [sendingOtp, setSendingOtp] = useState(null);
   const [deletingRequest, setDeletingRequest] = useState(null);
+  const [deletingUser, setDeletingUser] = useState(null);
   const [dashboardData, setDashboardData] = useState({});
   const [activeUsers, setActiveUsers] = useState([]);
+  const [expiredUsers, setExpiredUsers] = useState([]);
   const [sendingNotification, setSendingNotification] = useState(null); // To track which notification is being sent
 
   useEffect(() => {
     fetchRegistrations();
     fetchActiveUsers();
+    fetchExpiredUsers();
     fetchDashboardData();
+    
   }, []);
 
   const handleLogout = () => {
@@ -57,6 +61,23 @@ const AdminDashboard = () => {
       setActiveUsers(data);
     } catch (error) {
       setError('Error fetching active users: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchExpiredUsers = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/admin/expired-users', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('AdminToken')}`,
+        },
+      });
+      if (!response.ok) throw new Error('Failed to fetch expired users');
+      const data = await response.json();
+      setExpiredUsers(data);
+    } catch (error) {
+      setError('Error fetching expired users: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -159,6 +180,30 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleDeleteUser = async (userEmail) => {
+    try {
+      setDeletingUser(userEmail); // Track which request is being deleted to show a loading state
+      const response = await fetch(`http://localhost:3001/user/${userEmail}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('AdminToken')}` // Ensure the token is sent with the request
+        }
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+      } else {
+        alert('Error deleting request: ' + data.message);
+      }
+    } catch (error) {
+      console.error('Error deleting request:', error);
+      alert('Error deleting request');
+    } finally {
+      setDeletingUser(null); // Reset loading state after deleting request
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -253,6 +298,38 @@ const AdminDashboard = () => {
                 
                 >
                   {sendingNotification === user._id ? 'Sending...' : 'Send Notification'}
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h2>Membership Expired Users</h2>
+      {error && <div style={{ color: 'red' }}>{error}</div>} {/* Display error message if any */}
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Membership Type</th>
+            <th>Membership Expiry Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {expiredUsers.map((user) => (
+            <tr key={user._id}>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <td>{user.membershipType ? user.membershipType.name : 'N/A'}</td>
+              <td>{new Date(user.membershipExpiryDate).toDateString()}</td>
+              <td>
+                <button
+                  onClick={() => handleDeleteUser(user.email)}
+                  disabled={deletingUser === user.email}
+                
+                >
+                  {deletingUser === user.email ? 'Remoing...' : 'Remove User'}
                 </button>
               </td>
             </tr>

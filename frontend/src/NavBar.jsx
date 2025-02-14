@@ -63,7 +63,6 @@ const NavBar = () => {
             </button>
             <div className="dropdown">
               <button onClick={handleDashboard}>Dashboard</button>
-              <button>Profile</button>
               <button onClick={handleLogout}>LogOut</button>
             </div>
           </div>

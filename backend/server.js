@@ -427,6 +427,27 @@ app.get('/history',authMiddleware, async (req, res) => {
   }
 });
 
+/*
+app.get('/history', authMiddleware, async (req, res) => {
+  const userEmail = req.user.email; // Extract user email from the token
+  try {
+    // Fetch workout sessions associated with the user
+    const workoutHistory = await WorkoutSession.find({ userEmail }) // Match user email in the database
+      .populate('exercises.exerciseId', 'name weight') // Populate exerciseId with exercise name and weight
+      .select('-__v') // Exclude unnecessary fields like __v from the response
+      .exec();
+
+    if (workoutHistory.length === 0) {
+      return res.status(404).json({ message: 'No workout history found for the user.' });
+    }
+
+    res.status(200).json(workoutHistory);
+  } catch (err) {
+    console.error('Error fetching workout history:', err.message);
+    res.status(500).json({ message: 'Error fetching workout history. Please try again later.' });
+  }
+});
+*/
 // Route to handle contact form submission
 app.post('/api/contact', async (req, res) => {
   try {
@@ -565,52 +586,56 @@ app.post('/admin/send-renewal-notification', async (req, res) => {
     if (!user) {
       return res.status(404).send('User not found.');
     }
-
-    // Check if the membership is expiring within the next 7 days
+  
+    // Check if the membership is expiring within the next 30 days
     const today = new Date();
     const expiryDate = new Date(user.membershipExpiryDate);
     const daysUntilExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
-
-    if (daysUntilExpiry > 7) {
-      return res.status(400).send('Membership is not expiring within the next 7 days.');
+  
+    if (daysUntilExpiry > 30) {
+      return res.status(400).send('Membership is not expiring within the next 30 days.');
     }
-
+  
     // Email content for renewal notification
     const mailOptions = {
       from: mailUser,
       to: user.email,
       subject: 'Membership Renewal Reminder',
       text: `Dear ${user.name},\n\nYour gym membership is set to expire on ${expiryDate.toDateString()}. 
-We value your commitment to fitness and encourage you to renew your membership to continue enjoying our facilities and services.\n\n
-Please visit our website or contact us to renew your membership before it expires.\n\n
-Thank you for being part of our community!\n\nBest regards,\GymPro Manager`,
+  We value your commitment to fitness and encourage you to renew your membership to continue enjoying our facilities and services.\n\n
+  Please visit our website or contact us to renew your membership before it expires.\n\n
+  Thank you for being part of our community!\n\nBest regards,\n\nGymPro Manager`,
     };
-
-    // Send the email
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending email:', error);
-        return res.status(500).send('Error sending renewal notification.');
-      }
-      res.json({ message: 'Membership renewal notification sent to user\'s email.' });
-    });
+  
+    // Use async/await for sending email
+    await transporter.sendMail(mailOptions);
+    res.json({ message: "Membership renewal notification sent to user's email." });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('An error occurred while sending renewal notification.');
   }
+  
 });
 
-app.get('/admin/active-users',async (req, res) => {
+app.get('/admin/active-users', async (req, res) => {
   try {
-    // Fetch registrations where payment is not confirmed and populate membershipType
-    const activeUsers = await User.find({ paymentConfirmed: true }).populate('membershipType');
-    
+    // Get the current date without the time component
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Fetch users where payment is confirmed and membership expiry date is after today's date
+    const activeUsers = await User.find({
+      paymentConfirmed: true,
+      membershipExpiryDate: { $gte: today }
+    }).populate('membershipType');
+
     res.json(activeUsers);
   } catch (error) {
-    console.error('Error fetching registrations:', error);
-    res.status(500).send('An error occurred while fetching registrations.');
+    console.error('Error fetching active users:', error);
+    res.status(500).send('An error occurred while fetching active users.');
   }
 });
+
 
 app.get('/admin/dashboard-summary', async (req, res) => {
   try {
@@ -669,6 +694,89 @@ app.get('/admin/contact-messages', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch messages' });
+  }
+});
+
+app.get('/admin/expired-users', async (req, res) => {
+  try {
+    // Get the current date without the time component
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Fetch users where payment is confirmed and membership expiry date is before today's date
+    const expiredUsers = await User.find({
+      paymentConfirmed: true,
+      membershipExpiryDate: { $lt: today }
+    }).populate('membershipType');
+
+    res.json(expiredUsers);
+  } catch (error) {
+    console.error('Error fetching expired users:', error);
+    res.status(500).send('An error occurred while fetching expired users.');
+  }
+});
+
+
+// Fetch Users With Expired Memberships
+app.get('/expired-memberships', async (req, res) => {
+  try {
+    const today = new Date();
+    const deactiveUsers = await User.find({ membershipExpiryDate: { $lt: today } });
+
+    res.status(200).json({
+      success: true,
+      users: deactiveUsers,
+    });
+  } catch (error) {
+    console.error('Error fetching expired memberships:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching expired memberships.',
+    });
+  }
+});
+
+// Delete User By ID
+app.delete('/delete-user/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully.',
+    });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while deleting user.',
+    });
+  }
+});
+
+app.delete('/user/:email', async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    // Find the user by email and delete
+    const deletingUser = await User.findOneAndDelete({ email });
+
+    if (!deletingUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      message: 'User successfully deleted',
+      user: {
+        id: deletingUser._id,
+        name: deletingUser.name,
+        email: deletingUser.email,
+      },
+    });
+  } catch (err) {
+    console.error('Error deleting user:', err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
