@@ -592,7 +592,7 @@ app.post('/admin/send-renewal-notification', async (req, res) => {
     const expiryDate = new Date(user.membershipExpiryDate);
     const daysUntilExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
   
-    if (daysUntilExpiry > 30) {
+    if (daysUntilExpiry > 700) {
       return res.status(400).send('Membership is not expiring within the next 30 days.');
     }
   
@@ -782,3 +782,24 @@ app.delete('/user/:email', async (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
+
+// Create a new user with membershipExpiryDate as March 4, 2025
+/*
+const newUser = new User({
+  name: 'Diksha',
+  email: 'dikshagawade413@gmail.com',
+  password: '$2b$10$CtwNFErhw3gWOAHJLhcUTuKhQQ2xrpIO9AXZltpcEh45MiYbrJeSu', // Replace with a real hashed password
+  membershipType: '66d89aac918706728adb2d24',  // Replace with a valid membership ID if needed
+  termsAgreed: true,
+  paymentConfirmed: true,
+  membershipStartDate: new Date('2025-01-01'),  // Example start date
+  membershipExpiryDate: new Date('2025-03-04'),  // Set to March 4, 2025
+  otp: '123456',  // Optional OTP if needed
+  otpExpiry: new Date('2025-03-05'),  // Optional expiry date for OTP
+  exercises: [],  // Empty array for now, or add exercise IDs if available
+});
+
+// Save the new user to the database
+newUser.save()
+*/

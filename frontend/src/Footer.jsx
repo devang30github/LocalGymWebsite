@@ -26,9 +26,9 @@ const Footer = () => {
       <div className="footer-section">
         <h3>Follow Us</h3>
         <div className="social-icons">
-          <a href="#"><FacebookIcon /></a>
-          <a href="#"><TwitterIcon /></a>
-          <a href="#"><InstagramIcon /></a>
+          <a href="https://www.instagram.com/d3vang0/"><FacebookIcon /></a>
+          <a href="https://www.instagram.com/d3vang0/"><TwitterIcon /></a>
+          <a href="https://www.instagram.com/d3vang0/"><InstagramIcon /></a>
         </div>
       </div>
       <div className="footer-section">
